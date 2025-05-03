@@ -7,9 +7,6 @@ export async function middleware(request: NextRequest) {
   const session = await auth();
   const isPublicRoute =
     currentRoute === "/login" || currentRoute === "/register";
-  // if (!session && !isPublicRoute) {
-  //   return NextResponse.redirect(new URL("/login", request.url));
-  // }
 
   console.log("from middleware", session);
   if (!session && !isPublicRoute) {
@@ -17,13 +14,16 @@ export async function middleware(request: NextRequest) {
   }
   if (session?.user && isPublicRoute) {
     return NextResponse.redirect(
-      new URL(`/dashboard/${session?.user.role}/profile`, request.url)
+      new URL(
+        `/dashboard/${session?.user.role.toLowerCase()}/profile`,
+        request.url
+      )
     );
   }
   // Ensuring a particullar role session?.user can access only a particular route
   if (
     session?.user?.role &&
-    !currentRoute.startsWith(`/dashboard/${session?.user.role}`)
+    !currentRoute.startsWith(`/dashboard/${session?.user.role.toLowerCase()}`)
   ) {
     return NextResponse.redirect(
       new URL(`/dashboard/${session?.user.role}`, request.url)

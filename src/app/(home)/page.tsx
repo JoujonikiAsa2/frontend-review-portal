@@ -177,7 +177,7 @@ const Home = () => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <Link
-                    href={`/dashboard/${session?.data?.user?.role}/profile`}
+                    href={`/dashboard/${session?.data?.user?.role.toLowerCase()}/profile`}
                     className="w-full"
                   >
                     Dashboard

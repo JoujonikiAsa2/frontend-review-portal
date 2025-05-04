@@ -25,7 +25,6 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
-  const router = useRouter();
   const pathName = usePathname();
   const isRegistrationPage = pathName.endsWith("/register");
   const form = useForm<z.infer<typeof formSchema>>({
@@ -43,7 +42,7 @@ export function LoginForm({
     const toastId = toast.loading(
       `${isRegistrationPage ? "Registering" : "Logging in"}...`
     );
-    const actionType = isRegistrationPage ? "register" : "login";
+    const actionType = isRegistrationPage ? "create" : "login";
     if (isRegistrationPage) {
       result = await handleAuthentication(actionType, values as IAuth);
     } else {

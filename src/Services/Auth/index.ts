@@ -27,7 +27,7 @@ export const handleAuthentication = async (
     });
     console.log("Payload", payload);
     const api = `${backendUrl}/${
-      actionType === "register" ? "user" : "auth"
+      actionType === "create" ? "user" : "auth"
     }/${actionType}`;
     console.log("API", api);
     const res = await fetch(api, {

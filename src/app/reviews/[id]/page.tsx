@@ -1,11 +1,10 @@
-// app/review/[id]/page.tsx
+
 import ReviewDetails from '@/components/ReviewDetails';
 import { Review } from '@/types/review';
-// import ReviewDetails from '@/components/ReviewDetails';
 import { notFound } from 'next/navigation';
+import type { Metadata } from "next"
 
 async function getReviewById(id: string): Promise<Review | null> {
-
   try {
     const res = await fetch(`https://backend-server-review-portal.vercel.app/api/v1/review/${id}`, {
       cache: 'no-store',
@@ -19,9 +18,14 @@ async function getReviewById(id: string): Promise<Review | null> {
     return null;
   }
 }
-
+export const metadata: Metadata = {
+  title: "Review Details | Your Product",
+  description: "Detailed customer review information",
+}
 export default async function ReviewPage({ params }: { params: { id: string } }) {
-  const review = await getReviewById("0d7955e7-b702-4fa1-b87c-c9985da81e50");
+  const id = params.id
+
+  const review = await getReviewById(id);
 
   if (!review) return notFound();
 

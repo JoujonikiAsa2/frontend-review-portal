@@ -36,9 +36,9 @@ export default function ReviewDetails({ review }: { review: Review }) {
       <Image
         src={review?.imageUrl}
         alt={review?.title}
-        width={500}
-        height={400}
-        className="object-cover rounded-md"
+        width= {600}
+        height={300}
+        className="object-cover rounded-md "
       />
       <div className="relative mb-6">
         <p

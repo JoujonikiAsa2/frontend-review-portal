@@ -100,28 +100,34 @@ const ReviewsList = () => {
               </div>
 
               {/* Reviews List with enhanced spacing */}
-              <div className="grid gap-6">
-                {!loading ? (
-                  data?.data?.map((review: any) => (
-                    <ReviewCard
-                      key={review?.id}
-                      id={review?.id}
-                      title={review?.title}
-                      category={review.category}
-                      imageUrl={review?.imageUrl}
-                      rating={review?.RatingSummary}
-                      name={review?.user.name}
-                      date={review?.createdAt}
-                      content={review?.description}
-                      upVotes={review?.upVotes}
-                      downVotes={review?.downVotes}
-                      verified={review?.isPremium}
-                    />
-                  ))
-                ) : (
-                  <CustomLoader />
-                )}
-              </div>
+              {data?.data?.length !== 0 ? (
+                <div className="grid gap-6">
+                  {!loading ? (
+                    data?.data?.map((review: any) => (
+                      <ReviewCard
+                        key={review?.id}
+                        id={review?.id}
+                        title={review?.title}
+                        category={review.category}
+                        imageUrl={review?.imageUrl}
+                        rating={review?.RatingSummary}
+                        name={review?.user.name}
+                        date={review?.createdAt}
+                        content={review?.description}
+                        upVotes={review?.upVotes}
+                        downVotes={review?.downVotes}
+                        verified={review?.isPremium}
+                      />
+                    ))
+                  ) : (
+                    <CustomLoader />
+                  )}
+                </div>
+              ) : (
+                <div className="w-full h-[60vh] flex items-center justify-center">
+                  <p className="text-lg font-bold">No reviews avaiable</p>
+                </div>
+              )}
 
               {/* Pagination with decorative elements */}
               {data?.data?.length >= 5 && (

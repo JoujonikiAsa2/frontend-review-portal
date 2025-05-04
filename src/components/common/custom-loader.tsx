@@ -2,8 +2,8 @@ import React from 'react';
 
 const CustomLoader = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="max-w-md w-full">
+    <div className="h-[60vh] flex items-center justify-center">
+      <div className="max-w-md w-full h-full flex items-center justify-center">
         <div className="flex flex-col items-center">
 
           <div className="flex space-x-2">

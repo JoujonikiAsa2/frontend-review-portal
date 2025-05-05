@@ -1,8 +1,10 @@
 
+import React from 'react';
 import ReviewDetails from '@/components/ReviewDetails';
 import { Review } from '@/types/review';
 import { notFound } from 'next/navigation';
-import type { Metadata } from "next"
+import { Metadata } from 'next';
+// import Cookies from 'js-cookie';
 
 async function getReviewById(id: string): Promise<Review | null> {
   try {
@@ -23,15 +25,16 @@ export const metadata: Metadata = {
   description: "Detailed customer review information",
 }
 export default async function ReviewPage({ params }: { params: { id: string } }) {
-  const id = params.id
+  const id = params?.id
 
   const review = await getReviewById(id);
-
   if (!review) return notFound();
 
   return(
-    <div className="flex flex-col items-center justify-center w-full h-full p-4 bg-gray-300">
-      <ReviewDetails review={review} />
-    </div>
+      
+        <div className="flex flex-col items-center justify-center w-full h-full p-4 bg-gray-300">
+          <ReviewDetails reviewItem={review} />
+        </div>
+  
   );
 }

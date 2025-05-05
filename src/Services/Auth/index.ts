@@ -25,7 +25,7 @@ export const handleAuthentication = async (
         delete payload[key as keyof typeof payload];
       }
     });
-    console.log("Payload", payload);
+    // console.log("Payload", payload);
     const api = `${backendUrl}/${
       actionType === "create" ? "user" : "auth"
     }/${actionType}`;
@@ -39,7 +39,7 @@ export const handleAuthentication = async (
     });
 
     const result = await res.json();
-    console.log("Auth result", result);
+    // console.log("Auth result", result);
     if (actionType !== "register") {
       const cookieStore = await cookies();
       cookieStore.set("accessToken", result.data.accessToken, {

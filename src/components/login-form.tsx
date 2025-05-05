@@ -21,6 +21,7 @@ import Link from "next/link";
 import { IAuth } from "@/types/globals";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
+import getToken from "@/Helpers/getToken";
 export function LoginForm({
   className,
   ...props
@@ -53,6 +54,7 @@ export function LoginForm({
       //   role: result?.data?.role,
       // };
       // console.log("user", user);
+      const tokenF = await getToken()
       const authResponse = await signIn("credentials", {
         // Include all the data you need in the session
         email: result?.data?.email,
@@ -61,7 +63,9 @@ export function LoginForm({
         photoUrl: result?.data?.photoUrl || "",
         // Use a special flag to indicate this was pre-authenticated
         isPreAuthenticated: "true",
+        token: tokenF,
       });
+      console.log(authResponse);
       console.log("Auth response", authResponse);
     }
     console.log(result);

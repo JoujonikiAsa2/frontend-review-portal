@@ -10,6 +10,7 @@ declare module "next-auth" {
     user: {
       role: string;
       googleAccessToken?: string;
+      token?: string;
     } & DefaultSession["user"];
   }
 }

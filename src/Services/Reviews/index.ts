@@ -14,7 +14,7 @@ export const getReviews = async (query: any) => {
       }
     }
 
-    console.log("query", query)
+    // console.log("query", query)
 
     const searchParams = new URLSearchParams();
 

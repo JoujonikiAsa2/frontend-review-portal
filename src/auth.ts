@@ -15,6 +15,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         role: { label: "Role", type: "text" },
         photoUrl: { label: "Photo URL", type: "text" },
         isPreAuthenticated: { label: "Pre-authenticated", type: "text" },
+        token: { label: "Token", type: "text" },
       },
       async authorize(credentials): Promise<any> {
         try {
@@ -102,11 +103,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       console.log({ token });
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token, user }) {
+      // console.log(".....................",user)
       if (token && session.user) {
         session.user.role = token.role as string;
         session.user.email = token.email as string;
         session.user.name = token.name;
+        
       }
       console.log({ session });
       return session;

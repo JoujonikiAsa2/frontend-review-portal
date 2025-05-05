@@ -1,13 +1,12 @@
-import ReviewForm from '@/components/ReviewManagement/ReviewForm'
-import React from 'react'
+import ReviewForm from "@/components/ReviewManagement/ReviewForm";
+import React from "react";
 
 const page = () => {
   return (
     <div>
-
-        <ReviewForm/>
+      <ReviewForm />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

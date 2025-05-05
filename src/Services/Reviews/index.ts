@@ -28,12 +28,9 @@ export const getReviews = async (query: any) => {
 
     const queryString = searchParams.toString();
     console.log(queryString);
-
+    console.log(`Api url ${backend_url}/review?${queryString}`);
     const res = await fetch(`${backend_url}/review?${queryString}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
 
     const result = await res.json();

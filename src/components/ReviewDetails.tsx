@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useGetReviewQuery, useUpdateVoteMutation } from '@/redux/services/reviewApi';
 import getToken from '@/Helpers/getToken';
+import ArticleComments from './reviews/chat';
 
 export default function ReviewDetails({ reviewItem }: { reviewItem: Review | null }) {
   const router = useRouter();
@@ -161,6 +162,10 @@ export default function ReviewDetails({ reviewItem }: { reviewItem: Review | nul
             </button>
           </div>
         </div>
+      </div>
+      <div  className="border-t border-gray-300 w-full my-6">
+        <h3 className="font-medium">User Comment Box</h3>
+          <ArticleComments articleId={currentReview?.id} />
       </div>
 
       <div className="mt-8 text-sm text-gray-600">

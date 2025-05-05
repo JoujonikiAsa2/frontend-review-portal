@@ -37,7 +37,9 @@ const Header = () => {
     <header className="w-full z-40   bg-background ">
       <div className="container relative mx-auto min-h-20 flex gap-4 flex-row lg:grid lg:grid-cols-3 items-center">
         <div className="flex lg:justify-center items-center">
-          <p className="font-semibold mr-4 playwrite-ro text-3xl">Opinia</p>
+          <Link href="/" className="font-semibold mr-4 playwrite-ro text-3xl">
+            Opinia
+          </Link>
           <NavigationMenu className="flex justify-start items-start">
             <NavigationMenuList className="flex justify-start gap-4 flex-row">
               {navigationItems.map((item) => (

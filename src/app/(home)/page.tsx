@@ -2,6 +2,7 @@ import Banner from "@/components/Home/Banner";
 import ReviewSection from "@/components/Home/ReviewSection";
 import Header from "@/components/Shared/Header";
 import Footer from "@/components/Shared/Footer";
+import StatsSection from "@/components/Home/Stats";
 const Home = async () => {
   return (
     <div>
@@ -9,10 +10,8 @@ const Home = async () => {
       <Banner />
       {/* Review Section */}
       <ReviewSection />
-
       {/* Status section */}
-      
-    
+      <StatsSection />
     </div>
   );
 };

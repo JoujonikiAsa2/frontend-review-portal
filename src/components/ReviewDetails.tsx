@@ -1,10 +1,9 @@
-'use client';
-import { Review } from '@/types/review';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+"use client";
+import { Review } from "@/types/review";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useGetReviewQuery, useUpdateVoteMutation } from '@/redux/services/reviewApi';
-import getToken from '@/Helpers/getToken';
 import ArticleComments from './reviews/chat';
 
 export default function ReviewDetails({ reviewItem }: { reviewItem: Review | null }) {

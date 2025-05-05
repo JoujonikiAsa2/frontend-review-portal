@@ -40,8 +40,8 @@ const adminBar = [
     icon: IconDashboard,
   },
   {
-    title: "AdminBar",
-    url: "#",
+    title: "Create Review",
+    url: "/dashboard/admin/create-review",
     icon: IconListDetails,
   },
   {
@@ -180,6 +180,8 @@ const Data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data, status } = useSession();
+  console.log("data from layout",data);
+  
   console.log("from side bar", data);
   if (status === "loading") return <div>Loading...</div>;
   return (
@@ -200,7 +202,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data?.user?.role === "admin" ? adminBar : userBar} />
+        <NavMain items={data?.user?.role.toLowerCase() === "admin" ? adminBar : userBar} />
         <NavSecondary items={Data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

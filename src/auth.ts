@@ -19,7 +19,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials): Promise<any> {
         try {
-          console.log("credentials", credentials);
+          console.dir(credentials, {
+            depth: "infinity",
+          });
           // Check if this is our pre-authenticated flow
           if (credentials?.isPreAuthenticated === "true" && credentials.email) {
             // Create user object with all required fields
@@ -29,6 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               name: credentials.name,
               role: credentials.role,
               photoUrl: credentials.photoUrl || "",
+              token: credentials.token,
             };
           }
           return null;
@@ -99,17 +102,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.email = user.email;
         token.name = user.name;
         token.googleAccessToken = user.googleAccessToken;
+        token.token = user.token;
       }
       console.log({ token });
       return token;
     },
-    async session({ session, token, user }) {
-      // console.log(".....................",user)
+    async session({ session, token }) {
       if (token && session.user) {
         session.user.role = token.role as string;
         session.user.email = token.email as string;
         session.user.name = token.name;
-        
+        session.user.token = token.token as string;
       }
       console.log({ session });
       return session;

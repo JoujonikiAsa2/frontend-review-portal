@@ -47,3 +47,27 @@ export type Comment = {
   reviewId: string;
   review: TReview;
 };
+
+
+// export type TReview = {
+//   id: string;
+//   title: string;
+//   description: string;
+//   userId: string;
+//   imageUrl: string;
+//   category: "ELECTRONICS" | string;
+//   upVotes: number;
+//   downVotes: number;
+//   isPremium: boolean;
+//   RatingSummary: number;
+//   isPublished: boolean;
+//   createdAt: string;
+//   updatedAt: string;
+//   price: number;
+//   user: {
+//     id: string;
+//     name: string;
+//     email: string;
+//     imageUrl: string | null;
+//   };
+// };

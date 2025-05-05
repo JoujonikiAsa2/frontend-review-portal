@@ -43,15 +43,71 @@ export const getReviews = async (query: any) => {
   }
 };
 
-export const getReviewDetails = async (id: string) => {
+export const getReviewDetails = async (id: string, action?: string) => {
   try {
-    const res = await fetch(`${backend_url}/review/${id}`, {
+    const url = action
+      ? `${backend_url}/review/${id}?action=${action}`
+      : `${backend_url}/review/${id}`;
+    const res = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
     const result = await res.json();
+    console.log("All reviews fetched", result);
+
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch reviews");
+  }
+};
+
+export const getUnpublishedReviews = async () => {
+  try {
+    const token = await getToken();
+    const res = await fetch(`${backend_url}/review/unpublished`, {
+      method: "GET",
+      headers: {
+        Authorization: `${token}`,
+      },
+      next: {
+        tags: ["unpublished-reviews"],
+      },
+    });
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch reviews");
+  }
+};
+
+export const updateReviewStatus = async (
+  reviewId: string,
+  actionType: string
+) => {
+  try {
+    const token = await getToken();
+    console.log(
+      `${backend_url}/review/${reviewId}?actionType=${actionType}`
+    );
+    const res = await fetch(
+      `${backend_url}/review/${reviewId}?actionType=${actionType}`,
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `${token}`,
+        },
+      }
+    );
+    const result = await res.json();
+    console.log("Review UPDATE result", result);
+    if (!res.ok) {
+      throw new Error("Failed to update review");
+    }
+    revalidateTag("unpublished-reviews");
     return result;
   } catch (error) {
     console.log(error);

@@ -32,7 +32,7 @@ import {
 } from "@/components/ui/sidebar";
 // import { auth } from "@/auth";
 import { useSession } from "next-auth/react";
-import { BadgeDollarSign, ListCollapse } from "lucide-react";
+import { BadgeDollarSign, GitPullRequest, ListCollapse } from "lucide-react";
 import Link from "next/link";
 const adminBar = [
   {
@@ -51,14 +51,9 @@ const adminBar = [
     icon: IconChartBar,
   },
   {
-    title: "Projects",
-    url: "#",
-    icon: IconFolder,
-  },
-  {
-    title: "Team",
-    url: "#",
-    icon: IconUsers,
+    title: "Review Requests",
+    url: "/dashboard/admin/review-request",
+    icon: GitPullRequest,
   },
 ];
 const userBar = [
@@ -83,80 +78,6 @@ const userBar = [
     icon: BadgeDollarSign,
   },
 ];
-const Data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
-};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data, status } = useSession();

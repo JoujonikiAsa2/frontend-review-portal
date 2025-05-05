@@ -3,6 +3,7 @@
 import { TPaymentPayload } from "@/types/globals";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
+import { getToken } from "../GlobalServices";
 
 const backendUrl = process.env.AUTH_BACKEND_URL as string;
 
@@ -82,9 +83,16 @@ export const getPaymentById = async (id: string) => {
 };
 
 export const getUsersAllPayments = async (email: string) => {
+  const token = await getToken()
   try {
-    const res = await fetch(`${backendUrl}/payment/my-payments/${email}`);
+    const res = await fetch(`${backendUrl}/payment/my-payments/${email}`, {
+      method: "GET",
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
     const result = await res.json();
+    console.log("payment result", result);
     return result;
   } catch (error) {
     console.log("error", error);

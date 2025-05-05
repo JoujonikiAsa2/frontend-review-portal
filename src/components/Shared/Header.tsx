@@ -46,8 +46,8 @@ const Header = () => {
                 <NavigationMenuItem key={item.title}>
                   {item.href ? (
                     <>
-                      <NavigationMenuLink>
-                        <Link href={item.href}>{item.title}</Link>
+                      <NavigationMenuLink href={item.href}>
+                        {item.title}
                       </NavigationMenuLink>
                     </>
                   ) : (

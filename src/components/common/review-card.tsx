@@ -5,7 +5,6 @@ import { ReviewRating } from "./review-rating";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import premiumLogo from "@/assets/crown.png";
-
 interface ReviewCardProps {
   id: string;
   title: string;
@@ -19,7 +18,6 @@ interface ReviewCardProps {
   downVotes: number;
   verified: boolean;
 }
-
 export function ReviewCard({
   id,
   title,
@@ -33,56 +31,82 @@ export function ReviewCard({
   downVotes,
   verified,
 }: ReviewCardProps) {
-  console.log(upVotes, downVotes);
-
   return (
-    <Card className="p-5 hover:shadow-md transition-shadow">
-      <div>
-        <div className="flex items-start justify-between">
-          <h3 className="font-semibold text-lg text-gray-900">{title}</h3>
-          {verified && (
-            <Image src={premiumLogo} height={28} width={28} alt="Premium" />
-          )}
+    <Card className="p-6 hover:shadow-lg transition-all duration-300 border border-gray-100">
+      <div className="grid md:grid-cols-3 gap-6">
+        {/* Left side - Image */}
+        <div className="md:col-span-1">
+          <div className="aspect-square w-full relative overflow-hidden rounded-md bg-gray-50">
+            <Image
+              src={imageUrl}
+              alt={title}
+              fill
+              className="object-cover hover:scale-105 transition-transform duration-500"
+            />
+          </div>
         </div>
 
-        <div className="w-fit bg-blue-400 rounded text-xs text-white px-1">
-          {category}
+        {/* Right side - Content */}
+        <div className="md:col-span-2 flex flex-col">
+          <div className="flex items-start justify-between mb-2">
+            <div>
+              <h3 className="font-serif font-semibold text-xl text-black mb-1">
+                {title}
+              </h3>
+              <span className="inline-block px-3 py-1 bg-black text-white text-xs font-medium rounded-full mb-2">
+                {category}
+              </span>
+            </div>
+            {verified && (
+              <div className="flex items-center">
+                <Image
+                  src={premiumLogo}
+                  height={24}
+                  width={24}
+                  alt="Premium"
+                  className="filter grayscale"
+                />
+                <span className="text-xs text-gray-600 ml-1">Verified</span>
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center gap-2 mb-2">
+            <ReviewRating rating={rating} />
+            <span className="text-sm font-medium text-gray-700">
+              {rating}.0
+            </span>
+          </div>
+
+          <div className="text-sm text-gray-500 mb-3">
+            By <span className="font-medium text-black">{name}</span> •{" "}
+            {new Date(date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </div>
+
+          <p className="text-gray-700 line-clamp-3 mb-4">{content}</p>
+
+          <div className="mt-auto flex items-center justify-between">
+            <div className="text-sm text-gray-500">
+              <span className="font-medium text-black">
+                {upVotes + downVotes}
+              </span>{" "}
+              people voted
+            </div>
+
+            <Link href={`/reviews/${id}`} key={id}>
+              <Button
+                variant="outline"
+                className="text-black border-black hover:bg-black hover:text-white transition-colors"
+              >
+                Read More
+              </Button>
+            </Link>
+          </div>
         </div>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <ReviewRating rating={rating} />
-        <span className="text-sm text-gray-600">{rating}.0</span>
-      </div>
-
-      <div className="text-sm text-gray-500 ">
-        By <span className="italic text-orange-400 font-bold">{name}</span> on{" "}
-        {new Date(date).toLocaleDateString()}
-      </div>
-
-      <p className="text-gray-700 line-clamp-3">{content}</p>
-      <p>
-        <Link
-          href={`/reviews/${id}`}
-          key={id}
-          className="block transition-transform hover:translate-x-1"
-        >
-          <Button variant={"outline"} className="text-blue-400">
-            Read More
-          </Button>
-        </Link>
-      </p>
-      <Image
-        src={imageUrl}
-        alt="Product Image"
-        height={300}
-        width={300}
-        className="object-cover rounded border"
-      />
-
-      <div className="text-sm text-gray-500">
-        <span className="text-orange-400 font-bold">{upVotes + downVotes}</span>{" "}
-        people voted
       </div>
     </Card>
   );

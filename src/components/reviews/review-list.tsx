@@ -61,25 +61,24 @@ const ReviewsList = () => {
 
   const { data, loading, error, refetch } = useFetch(fetchReviews);
 
-  console.log(data?.meta?.totalPage);
   return (
-    <div className="min-h-screen bg-gradient-to-b from-stone-50 to-stone-100">
+    <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-7xl mx-auto">
-          {/* Header with decorative elements */}
-          <div className="relative mb-10 text-center">
-            <div className="absolute left-0 right-0 top-1/2 border-t border-amber-200 -z-10"></div>
-            <h1 className="inline-block px-8 text-4xl font-serif font-bold text-stone-800 bg-gradient-to-b from-stone-50 to-stone-100 relative">
+          {/* Header with modern, minimalist styling */}
+          <div className="relative mb-12 text-center">
+            <div className="absolute left-0 right-0 top-1/2 border-t border-gray-200 -z-10"></div>
+            <h1 className="inline-block px-8 text-4xl font-serif font-bold text-black bg-white relative">
               Customer Reviews
             </h1>
           </div>
 
-          {/* Search Bar with elegant styling */}
-          <div className="mb-8 max-w-3xl mx-auto">
+          {/* Search Bar with clean styling */}
+          <div className="mb-10 max-w-3xl mx-auto">
             <SearchBar />
           </div>
 
-          <div className="flex flex-col md:flex-row gap-8">
+          <div className="flex flex-col md:flex-row gap-10">
             {/* Filter Sidebar */}
             <div className="w-full md:w-72 shrink-0">
               <FilterSidebar />
@@ -87,9 +86,9 @@ const ReviewsList = () => {
 
             {/* Main Content */}
             <div className="flex-1">
-              {/* Sort Controls with classic styling */}
-              <div className="flex justify-between items-center mb-6 border-b border-amber-200 pb-4">
-                <p className="text-stone-600 italic">
+              {/* Sort Controls with monochromatic styling */}
+              <div className="flex justify-between items-center mb-8 border-b border-gray-200 pb-4">
+                <p className="text-gray-600 font-light">
                   Showing{" "}
                   {data?.data?.length > 10
                     ? data?.meta?.limit
@@ -101,7 +100,7 @@ const ReviewsList = () => {
 
               {/* Reviews List with enhanced spacing */}
               {data?.data?.length !== 0 ? (
-                <div className="grid gap-6">
+                <div className="grid gap-8">
                   {!loading ? (
                     data?.data?.map((review: any) => (
                       <ReviewCard
@@ -125,16 +124,18 @@ const ReviewsList = () => {
                 </div>
               ) : (
                 <div className="w-full h-[60vh] flex items-center justify-center">
-                  <p className="text-lg font-bold">No reviews avaiable</p>
+                  <p className="text-lg font-medium text-gray-800">
+                    No reviews available
+                  </p>
                 </div>
               )}
 
-              {/* Pagination with decorative elements */}
+              {/* Pagination with minimalist design */}
               {data?.data?.length >= 5 && (
-                <div className="mt-12 relative">
-                  <div className="absolute left-0 right-0 top-1/2 border-t border-amber-200 -z-10"></div>
+                <div className="mt-16 relative">
+                  <div className="absolute left-0 right-0 top-1/2 border-t border-gray-200 -z-10"></div>
                   <div className="flex justify-center">
-                    <div className="inline-block px-6 bg-gradient-to-b from-stone-50 to-stone-100">
+                    <div className="inline-block px-6 bg-white">
                       <Pagination
                         totalPages={data?.meta?.totalPage}
                         currentPage={data?.meta?.page}

@@ -270,10 +270,7 @@ const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
 
           <button
             type="submit"
-            className="w-full py-3 px-4 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50 focus:ring-teal-900"
-            style={{
-              backgroundColor: "#093B3B",
-            }}
+            className="w-full py-3 px-4 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50 focus:ring-teal-900 bg-foreground"
             disabled={!stripe || !clientSecret}
           >
             {loading ? (

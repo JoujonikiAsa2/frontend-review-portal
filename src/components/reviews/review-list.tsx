@@ -9,6 +9,8 @@ import { ReviewCard } from "../common/review-card";
 import { Pagination } from "../common/pagination";
 import CustomLoader from "../common/custom-loader";
 import { useSearchParams } from "next/navigation";
+import { useAppSelector } from "@/redux/hooks";
+import { selectCurrentToken } from "@/redux/features/authSlice";
 
 const ReviewsList = () => {
   const searchParams = useSearchParams();
@@ -60,6 +62,10 @@ const ReviewsList = () => {
   ]);
 
   const { data, loading, error, refetch } = useFetch(fetchReviews);
+
+  const accessToken = useAppSelector(selectCurrentToken);
+
+  console.log({ accessToken });
 
   console.log(data?.meta?.totalPage);
   return (

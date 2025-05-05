@@ -4,7 +4,8 @@ import SessionProviderWrapper from "@/Providers/SessionProviderWrapper";
 import { ThemeProvider } from "@/Providers/ThemeProvider";
 import { Toaster } from "sonner";
 import ReduxProvider from "@/Providers/ReduxProvider";
-import './globals.css'
+import '../globals.css'
+import Header from "@/components/shared/Header";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <SessionProviderWrapper>
+        <Header />
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >

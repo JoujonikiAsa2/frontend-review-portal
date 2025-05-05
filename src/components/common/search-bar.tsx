@@ -35,7 +35,7 @@ export function SearchBar() {
         />
         <Button
           type="submit"
-          className="absolute right-1.5 top-1/2 transform -translate-y-1/2 bg-amber-700 hover:bg-amber-800 text-white hover:cursor-pointer"
+          className="absolute right-1.5 top-1/2 transform -translate-y-1/2  bg-foreground hover: bg-foreground/80 text-white hover:cursor-pointer"
         >
           Search
         </Button>

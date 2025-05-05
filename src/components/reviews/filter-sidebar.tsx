@@ -12,7 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useRouter } from "next/navigation";
-import { DatePickerWithRange } from "./date-range-picker";
+// import { DatePickerWithRange } from "./date-range-picker";
 
 export function FilterSidebar() {
   const router = useRouter();
@@ -83,9 +83,10 @@ export function FilterSidebar() {
                     onChange={() =>
                       setParams((prev) => ({
                         ...prev,
-                        RatingSummary: rating,
+                        RatingSummary: prev.RatingSummary === rating ? null : rating,
                       }))
                     }
+                    checked={params.RatingSummary === rating}
                     className="text-amber-600 border-stone-300"
                   />
                   <Label
@@ -102,16 +103,17 @@ export function FilterSidebar() {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="date" className="border-b border-stone-100">
+        {/* <AccordionItem value="date" className="border-b border-stone-100">
           <AccordionTrigger className="py-3 text-stone-700 hover:text-amber-800 hover:no-underline">
             Review Date
           </AccordionTrigger>
           <AccordionContent>
             <div className="w-1/2 space-y-3 pl-1">
-              <div className="flex items-center space-x-2">
+              {/* {/* <div className="flex items-center space-x-2">
                 <DatePickerWithRange setParams={setParams} />
-              </div>
-              {/*
+              </div> */}
+        {/* */}
+        {/*
               <div className="flex items-center space-x-2">
                 <label>
                   End Date
@@ -127,10 +129,10 @@ export function FilterSidebar() {
                     className="w-full text-black border-stone-300"
                   />
                 </label>
-              </div> */}
+              </div> 
             </div>
           </AccordionContent>
-        </AccordionItem>
+        </AccordionItem> */}
 
         <AccordionItem value="categories" className="border-b border-stone-100">
           <AccordionTrigger className="py-3 text-stone-700 hover:text-amber-800 hover:no-underline">
@@ -147,11 +149,13 @@ export function FilterSidebar() {
                       onChange={() =>
                         setParams((prev) => ({
                           ...prev,
-                          category: category,
+                          category: prev.category === category ? "" : category,
                         }))
                       }
+                      checked={params.category === category}
                       className="text-amber-600 border-stone-300"
                     />
+
                     <Label
                       htmlFor={`feature-${category.toLowerCase()}`}
                       className="text-stone-700"

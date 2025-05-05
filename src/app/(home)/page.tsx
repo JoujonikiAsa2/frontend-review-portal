@@ -9,6 +9,9 @@ const Home = async () => {
       <Banner />
       {/* Review Section */}
       <ReviewSection />
+
+      {/* Status section */}
+      
     
     </div>
   );

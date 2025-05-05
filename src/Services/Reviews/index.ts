@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
 import { getToken } from "../GlobalServices";
 
 const backend_url = process.env.AUTH_BACKEND_URL;
@@ -57,6 +58,26 @@ export const getReviewDetails = async (id: string) => {
   }
 };
 
+export const getMyReviews = async () => {
+  try {
+    const token = await getToken();
+    const res = await fetch(`${backend_url}/review/my-reviews`, {
+      method: "GET",
+      headers: {
+        Authorization: `${token}`,
+      },
+      next: {
+        tags: ["reviews"],
+      },
+    });
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to fetch reviews");
+  }
+};
+
 export const createReview = async (payload: any) => {
   try {
     const token = await getToken();
@@ -72,6 +93,27 @@ export const createReview = async (payload: any) => {
     return result;
   } catch (error) {}
 };
+export const deleteReview = async (reviewId: string) => {
+  console.log("reviewId", reviewId);
+  try {
+    const token = await getToken();
+    const res = await fetch(`${backend_url}/review/delete/${reviewId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    const result = await res.json();
+    if (result.success) {
+      console.log("hitting");
+      revalidateTag("reviews");
+    }
+    console.log("Review UPDATE result", result);
+    return result;
+  } catch (error) {
+    throw new Error("Failed to delete review");
+  }
+};
 export const updateReview = async (payload: any, reviewId: string) => {
   try {
     const token = await getToken();
@@ -85,5 +127,7 @@ export const updateReview = async (payload: any, reviewId: string) => {
     const result = await res.json();
     console.log("Review UPDATE result", result);
     return result;
-  } catch (error) {}
+  } catch (error) {
+    throw new Error("Failed to update review");
+  }
 };

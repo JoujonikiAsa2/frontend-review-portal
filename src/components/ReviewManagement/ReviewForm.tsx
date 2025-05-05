@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/form";
 import { createReview, updateReview } from "@/Services/Reviews";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
 
 // Define form schema with Zod
 const formSchema = z.object({
@@ -45,11 +46,11 @@ export default function ReviewForm() {
   const path = usePathname();
   const formType = path.split("/")[3].split("-")[0];
   const reviewId = path.split("/")[4];
-
+  const router = useRouter();
   // State for image file and preview
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
+  const { data: session } = useSession();
   const categories = {
     MOVIE: "Movie",
     TV_SHOW: "TV Show",
@@ -101,7 +102,7 @@ export default function ReviewForm() {
       title: values.title,
       category: values.category,
       description: values.description,
-      RatingSummary:Number(values.RatingSummary),
+      RatingSummary: Number(values.RatingSummary),
     };
     // Create FormData object for API submission
     const transformedFormData = new FormData();
@@ -119,6 +120,11 @@ export default function ReviewForm() {
       toast.success(result.message, {
         id: loadingId,
       });
+      setTimeout(() => {
+        router.push(
+          `/dashboard/${session?.user.role.toLowerCase()}/my-reviews`
+        );
+      }, 1000);
     } else {
       toast.error(result.message, {
         id: loadingId,

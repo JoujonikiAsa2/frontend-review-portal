@@ -67,13 +67,13 @@ const userBar = [
     icon: IconDashboard,
   },
   {
-    title: "User Bar",
-    url: "/dashboard/user/test",
+    title: "My Reviews",
+    url: "/dashboard/user/my-reviews",
     icon: IconListDetails,
   },
   {
-    title: "Analytics",
-    url: "#",
+    title: "Create Review",
+    url: "/dashboard/user/create-review",
     icon: IconChartBar,
   },
   {
@@ -180,8 +180,8 @@ const Data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data, status } = useSession();
-  console.log("data from layout",data);
-  
+  console.log("data from layout", data);
+
   console.log("from side bar", data);
   if (status === "loading") return <div>Loading...</div>;
   return (
@@ -202,7 +202,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data?.user?.role.toLowerCase() === "admin" ? adminBar : userBar} />
+        <NavMain
+          items={
+            data?.user?.role.toLowerCase() === "admin" ? adminBar : userBar
+          }
+        />
         <NavSecondary items={Data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

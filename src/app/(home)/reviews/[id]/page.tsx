@@ -5,12 +5,9 @@ import type { Metadata } from "next";
 
 async function getReviewById(id: string): Promise<Review | null> {
   try {
-    const res = await fetch(
-      `https://backend-server-review-portal.vercel.app/api/v1/review/${id}`,
-      {
-        cache: "no-store",
-      }
-    );
+    const res = await fetch(`${process.env.AUTH_BACKEND_URL}/review/${id}`, {
+      cache: "no-store",
+    });
     const json = await res.json();
 
     if (!res.ok || !json.success) return null;
@@ -27,9 +24,9 @@ export const metadata: Metadata = {
 export default async function ReviewPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const id = params.id;
+  const { id } = await params;
 
   const review = await getReviewById(id);
 

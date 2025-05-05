@@ -21,6 +21,7 @@ import Link from "next/link";
 import { IAuth } from "@/types/globals";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
+import { getToken } from "@/Services/GlobalServices";
 export function LoginForm({
   className,
   ...props
@@ -47,12 +48,8 @@ export function LoginForm({
       result = await handleAuthentication(actionType, values as IAuth);
     } else {
       result = await handleAuthentication(actionType, values as IAuth);
-      // const user = {
-      //   email: result?.data?.email,
-      //   name: result?.data?.name,
-      //   role: result?.data?.role,
-      // };
-      // console.log("user", user);
+      const token = await getToken();
+      console.log("Token new ", token);
       const authResponse = await signIn("credentials", {
         // Include all the data you need in the session
         email: result?.data?.email,
@@ -61,6 +58,7 @@ export function LoginForm({
         photoUrl: result?.data?.photoUrl || "",
         // Use a special flag to indicate this was pre-authenticated
         isPreAuthenticated: "true",
+        token,
       });
       console.log("Auth response", authResponse);
     }

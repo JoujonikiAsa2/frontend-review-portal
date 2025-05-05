@@ -1,5 +1,7 @@
 "use server";
 
+import { getToken } from "../GlobalServices";
+
 const backend_url = process.env.AUTH_BACKEND_URL;
 
 export const getReviews = async (query: any) => {
@@ -14,7 +16,7 @@ export const getReviews = async (query: any) => {
       }
     }
 
-    console.log("query", query)
+    console.log("query", query);
 
     const searchParams = new URLSearchParams();
 
@@ -25,7 +27,7 @@ export const getReviews = async (query: any) => {
     });
 
     const queryString = searchParams.toString();
-    console.log(queryString)
+    console.log(queryString);
 
     const res = await fetch(`${backend_url}/review?${queryString}`, {
       method: "GET",
@@ -41,7 +43,6 @@ export const getReviews = async (query: any) => {
     throw new Error("Failed to fetch reviews");
   }
 };
-
 
 export const getReviewDetails = async (id: string) => {
   try {
@@ -59,5 +60,33 @@ export const getReviewDetails = async (id: string) => {
   }
 };
 
-
-const createReview = async(payload:{title, description, category, })
+export const createReview = async (payload: any) => {
+  try {
+    const token = await getToken();
+    const res = await fetch(`${backend_url}/review/create`, {
+      method: "POST",
+      headers: {
+        Authorization: `${token}`,
+      },
+      body: payload,
+    });
+    const result = await res.json();
+    console.log("Review result", result);
+    return result;
+  } catch (error) {}
+};
+export const updateReview = async (payload: any, reviewId: string) => {
+  try {
+    const token = await getToken();
+    const res = await fetch(`${backend_url}/review/update/${reviewId}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `${token}`,
+      },
+      body: payload,
+    });
+    const result = await res.json();
+    console.log("Review UPDATE result", result);
+    return result;
+  } catch (error) {}
+};

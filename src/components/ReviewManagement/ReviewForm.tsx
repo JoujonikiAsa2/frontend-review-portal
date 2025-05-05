@@ -27,12 +27,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { createReview, updateReview } from "@/Services/Reviews";
+import { toast } from "sonner";
 
 // Define form schema with Zod
 const formSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   category: z.string().min(1, { message: "Please select a category" }),
-  description: z.string().min(10, { message: "Review should be at least 10 characters" }),
+  description: z
+    .string()
+    .min(10, { message: "Review should be at least 10 characters" }),
   RatingSummary: z.string().min(1, { message: "Please provide a rating" }),
   markAsPremium: z.boolean().default(false),
 });
@@ -40,14 +44,15 @@ const formSchema = z.object({
 export default function ReviewForm() {
   const path = usePathname();
   const formType = path.split("/")[3].split("-")[0];
-  
+  const reviewId = path.split("/")[4];
+
   // State for image file and preview
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const categories = {
     MOVIE: "Movie",
-    TV_SHOW: "TV Show", 
+    TV_SHOW: "TV Show",
     BOOK: "Book",
     ELECTRONICS: "Electronics",
     VEHICLE: "Vehicle",
@@ -88,22 +93,37 @@ export default function ReviewForm() {
     setImagePreview(null);
   };
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const loadingId = toast.loading("Submitting...");
     // Handle form submission
     console.log("Form submitted:", values);
-    
+    const payload = {
+      title: values.title,
+      category: values.category,
+      description: values.description,
+      RatingSummary:Number(values.RatingSummary),
+    };
     // Create FormData object for API submission
     const transformedFormData = new FormData();
     if (imageFile) {
       transformedFormData.append("file", imageFile);
     }
-    transformedFormData.append("data", JSON.stringify(values));
-    
-    // Log values for debugging
-    for (const value of transformedFormData.values()) {
-      console.log(value);
+    transformedFormData.append("data", JSON.stringify(payload));
+    let result;
+    if (formType === "create") {
+      result = await createReview(transformedFormData);
+    } else {
+      result = await updateReview(transformedFormData, reviewId);
     }
-    
+    if (result.success) {
+      toast.success(result.message, {
+        id: loadingId,
+      });
+    } else {
+      toast.error(result.message, {
+        id: loadingId,
+      });
+    }
     // Reset form after submission
     form.reset();
     setImageFile(null);
@@ -256,7 +276,9 @@ export default function ReviewForm() {
                             }`}
                             onClick={() => field.onChange(star.toString())}
                             onMouseEnter={(e) => {
-                              e.currentTarget.classList.add("hover:text-yellow-300");
+                              e.currentTarget.classList.add(
+                                "hover:text-yellow-300"
+                              );
                             }}
                           />
                         ))}

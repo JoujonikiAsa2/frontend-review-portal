@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL as string;
 
 const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
+  console.log(reviewId)
   const session = useSession();
   const router = useRouter()
   const user = session?.data?.user;
@@ -104,7 +105,6 @@ const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
     fetchReviewDetails();
   }, []);
 
-  //fetching stripe session
   useEffect(() => {
     const fetchStripeSession = async () => {
       const result = await getSession({
@@ -112,11 +112,11 @@ const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
         email: user?.email as string,
         amount: Number(review?.price || 200),
       });
-      //   console.log(result);
       setClientSecret(result?.data?.clientSecret);
     };
-    fetchStripeSession();
-  }, [review?.price, clientSecret]);
+    if (user && review?.price) fetchStripeSession();
+  }, [review?.price, user]);
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,7 +168,6 @@ const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
       if (error) {
         toast.error(error.message || "Payment failed");
       } else if (paymentIntent.status === "succeeded") {
-        console.log(paymentIntent.status);
         const paymentDetails = {
           email: user?.email,
           reviewId: review?.id,
@@ -180,7 +179,6 @@ const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
             paymentIntent.payment_method_types[0].charAt(0).toUpperCase() +
             paymentIntent.payment_method_types[0].slice(1),
         };
-        console.log(paymentDetails);
         // alert(JSON.stringify(paymentDetails));
 
         setName("");
@@ -205,8 +203,6 @@ const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
     }
     setLoading(false);
   };
-
-  console.log(review);
 
   return (
     <div className="w-full max-w-md  mx-auto">

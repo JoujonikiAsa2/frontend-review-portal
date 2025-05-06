@@ -33,7 +33,7 @@ export default function ReviewDetails({
 
   const [updateVote, { isLoading: isUpdating }] = useUpdateVoteMutation();
 
-  const currentReview = review?.data;
+  const currentReview = (review as any)?.data;
 
   const handleBack = () => router.back();
 
@@ -97,8 +97,8 @@ export default function ReviewDetails({
   };
 
   return (
-    <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-sm overflow-hidden">
-      {/* Header with back button */}
+    <div className="w-[70%] bg-white rounded-lg shadow-sm overflow-hidden">
+      {/* Header with bac button */}
       <div className="bg-foreground px-6 py-4 flex justify-between items-center">
         <h1 className="text-white font-bold text-lg">Review Details</h1>
         <button

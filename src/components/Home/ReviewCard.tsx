@@ -69,7 +69,7 @@ export default function ReviewHomeCard({ review }) {
       {/* Product Image - Fixed height */}
       <div className="h-40 overflow-hidden">
         <Image
-          src="/api/placeholder/400/200"
+          src={review?.imageUrl}
           alt={review.title || "Product image"}
           width={400}
           height={200}

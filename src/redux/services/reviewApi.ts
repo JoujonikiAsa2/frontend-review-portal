@@ -1,7 +1,5 @@
 // src/redux/services/reviewApi.ts
-import getToken from '@/Helpers/getToken';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import Cookies from 'js-cookie';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 interface Review {
   id: string;
@@ -20,38 +18,35 @@ interface Review {
   createdAt: string;
 }
 
-
-
 export const reviewApi = createApi({
-  reducerPath: 'reviewApi',
+  reducerPath: "reviewApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://backend-server-review-portal.vercel.app/api/v1/review/',
-    prepareHeaders: (headers) => {
-      // Client-side cookie access
-    //   const token = Cookies.get('accessToken');
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQXNhIiwiZW1haWwiOiJqb3Vqb25pa2lhc2Fyb3kub2ZmaWNpYWxAZ21haWwuY29tIiwidXNlclJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjM2MTQ2OSwiZXhwIjoxNzQ2NDQ3ODY5fQ.Wk1PDs_0fiwdnvQq0clQH1qlAnlTl22FsakYxBVETKQ"
+    baseUrl: `https://backend-server-review-portal.vercel.app/api/v1/review`,
+    prepareHeaders: async (headers) => {
+      const token = localStorage.getItem('accessToken')
       if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
+        headers.set("Authorization", `${token}`);
       }
       return headers;
     },
   }),
-  tagTypes: ['Review'],
+  tagTypes: ["Review"],
   endpoints: (builder) => ({
-    updateVote: builder.mutation<Review, {
-      reviewId: string;
-      voteType: 'upVotes' | 'downVotes';
-    }>({
+    updateVote: builder.mutation<
+      Review,
+      {
+        reviewId: string;
+        voteType: "upVotes" | "downVotes";
+      }>({
       query: ({ reviewId, voteType }) => ({
-        url: `update-vote/${reviewId}`,
-        method: 'PATCH',
-        body: { [voteType]: voteType === 'upVotes' ? 1 : -1 },
+        url: `update-vote/${reviewId}?voteType=${voteType}`,
+        method: "PATCH",
       }),
-      invalidatesTags: ['Review'],
+      invalidatesTags: ["Review"],
     }),
     getReview: builder.query<Review, string>({
       query: (id) => `${id}`,
-      providesTags: ['Review'],
+      providesTags: ["Review"],
     }),
   }),
 });

@@ -1,17 +1,14 @@
 import Banner from "@/components/Home/Banner";
 import ReviewSection from "@/components/Home/ReviewSection";
-import Header from "@/components/Shared/Header";
-import Footer from "@/components/Shared/Footer";
 import StatsSection from "@/components/Home/Stats";
-const Home = async () => {
+const Home = () => {
   return (
     <div>
       {/* Banner section */}
-      <Banner />
+      <Banner/>
       {/* Review Section */}
       <ReviewSection />
-      {/* Status section */}
-      <StatsSection />
+    <StatsSection />
     </div>
   );
 };

@@ -23,10 +23,14 @@ import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 import { getToken } from "@/Services/GlobalServices";
 // import getToken from "@/Helpers/getToken";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/features/authSlice";
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
+  const dispatch = useDispatch();
   const pathName = usePathname();
   const isRegistrationPage = pathName.endsWith("/register");
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,6 +41,7 @@ export function LoginForm({
       password: "",
     },
   });
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // console.log("hitting");
     // console.log(values);
@@ -57,7 +62,16 @@ export function LoginForm({
       //   role: result?.data?.role,
       // };
       // console.log("user", user);
-      const tokenF = await getToken()
+      const tokenF = await getToken();
+      const authUser = {
+        user: {
+          email: result?.data?.email,
+          name: result?.data?.name,
+          role: result?.data?.role,
+        },
+        token: tokenF,
+      };
+      dispatch(setUser(authUser));
       const authResponse = await signIn("credentials", {
         // Include all the data you need in the session
         email: result?.data?.email,

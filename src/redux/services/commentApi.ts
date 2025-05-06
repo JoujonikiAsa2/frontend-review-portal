@@ -26,9 +26,10 @@ interface UpdateCommentPayload {
 export const commentApi = createApi({
   reducerPath: 'commentApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'https://backend-server-review-portal.vercel.app/api/v1/comment/',
+    baseUrl: `https://backend-server-review-portal.vercel.app/api/v1/comment/`,
     prepareHeaders: (headers) => {
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQXNhIiwiZW1haWwiOiJqb3Vqb25pa2lhc2Fyb3kub2ZmaWNpYWxAZ21haWwuY29tIiwidXNlclJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjM2MTQ2OSwiZXhwIjoxNzQ2NDQ3ODY5fQ.Wk1PDs_0fiwdnvQq0clQH1qlAnlTl22FsakYxBVETKQ";
+      const token = localStorage.get('accessToken')
+      // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQXNhIiwiZW1haWwiOiJqb3Vqb25pa2lhc2Fyb3kub2ZmaWNpYWxAZ21haWwuY29tIiwidXNlclJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NjM2MTQ2OSwiZXhwIjoxNzQ2NDQ3ODY5fQ.Wk1PDs_0fiwdnvQq0clQH1qlAnlTl22FsakYxBVETKQ";
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }

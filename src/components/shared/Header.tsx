@@ -1,5 +1,5 @@
-'use client'
-import React, { useEffect, useState } from "react";
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -10,6 +10,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Menu, Moon, MoveRight, Sun, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -23,54 +24,30 @@ import { signOut, useSession } from "next-auth/react";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import deleteTokenFromCookie from "@/Helpers/deleteTokenFromCookie";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { logout } from "@/redux/features/authSlice";
-import { useAppDispatch } from "@/redux/hooks";
-
-const navigationItems = [
-  {
-    title: "Home",
-    href: "/",
-    description: "",
-  },
-  {
-    title: "Top Reviews",
-    href: "/top-reviews",
-    description: "",
-  },
-  {
-    title: "Categories",
-    href: "/categories",
-    description: "",
-  },
-];
+import Banner from "@/components/Home/Banner";
+import ReviewSection from "@/components/Home/ReviewSection";
+import { navigationItems } from "../Home/Constants";
 
 const Header = () => {
-  const dispatch = useAppDispatch()
   const session = useSession();
   console.log("session from home", session);
   const { setTheme } = useTheme();
   const [isOpen, setOpen] = useState(false);
-  useEffect(() => {
-    const result = async () => {
-      const result = await fetch("https://backend-server-review-portal.vercel.app");
-      const data = await result.json();
-      console.log("data", data);
-    };
-    result();
-  }, []);
   return (
     <header className="w-full z-40   bg-background ">
       <div className="container relative mx-auto min-h-20 flex gap-4 flex-row lg:grid lg:grid-cols-3 items-center">
         <div className="flex lg:justify-center items-center">
-          <p className="font-semibold mr-4 playwrite-ro text-3xl">Opinia</p>
+          <Link href="/" className="font-semibold mr-4 playwrite-ro text-3xl">
+            Opinia
+          </Link>
           <NavigationMenu className="flex justify-start items-start">
             <NavigationMenuList className="flex justify-start gap-4 flex-row">
               {navigationItems.map((item) => (
                 <NavigationMenuItem key={item.title}>
                   {item.href ? (
                     <>
-                      <NavigationMenuLink>
-                        <Button variant="ghost">{item.title}</Button>
+                      <NavigationMenuLink href={item.href}>
+                        {item.title}
                       </NavigationMenuLink>
                     </>
                   ) : (
@@ -152,7 +129,6 @@ const Header = () => {
                 <DropdownMenuItem
                   onClick={async () => {
                     await deleteTokenFromCookie();
-                    dispatch(logout())
                     return signOut({ redirect: false });
                   }}
                 >

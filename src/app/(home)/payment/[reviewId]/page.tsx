@@ -8,9 +8,14 @@ const CheckoutWrapper = dynamic(
   }
 );
 
-const PaymentPage = async ({ params }: { params: { reviewId: string } }) => {
-  const { reviewId } =  params;
-  console.log(reviewId)
+interface PaymentPageProps {
+  params: {
+    reviewId: string;
+  };
+}
+
+const PaymentPage = async ({ params }: PaymentPageProps) => {
+  const { reviewId } = params;
   
   return (
     <div className="w-full min-h-screen flex justify-center items-center">

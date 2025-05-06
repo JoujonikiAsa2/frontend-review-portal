@@ -1,7 +1,7 @@
 import ReviewDetails from "@/components/ReviewDetails";
 import { Review } from "@/types/review";
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
+
 
 async function getReviewById(id: string): Promise<Review | null> {
   try {
@@ -20,18 +20,11 @@ async function getReviewById(id: string): Promise<Review | null> {
     return null;
   }
 }
-export const metadata: Metadata = {
-  title: "Review Details | Your Product",
-  description: "Detailed customer review information",
-};
-export default async function ReviewPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const id = params.id;
 
-  const review = await getReviewById(id);
+export default async function ReviewPage({ params }: { params: { reviewId: string } }) {
+  const {reviewId} =  params;
+
+  const review = await getReviewById(reviewId);
 
   if (!review) return notFound();
 

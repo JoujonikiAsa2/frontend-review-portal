@@ -1,7 +1,8 @@
+'use client";'
 import React from "react";
 
 const AdminDashboard = () => {
-  return <div></div>;
+  return <div>admin dahsboard</div>;
 };
 
 export default AdminDashboard;

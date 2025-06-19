@@ -12,7 +12,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useRouter } from "next/navigation";
-import { DatePickerWithRange } from "./date-range-picker";
+// import { DatePickerWithRange } from "./date-range-picker";
 
 export function FilterSidebar() {
   const router = useRouter();
@@ -32,8 +32,6 @@ export function FilterSidebar() {
       ([_, value]) => value !== "" && value !== null && value !== undefined
     )
   );
-
-  console.log(filteredParams);
 
   //set the filtered params into searchUrl
   Object.entries(filteredParams).forEach(([key, value]) => {
@@ -56,45 +54,46 @@ export function FilterSidebar() {
     router.push(`/reviews`);
   };
 
-  console.log(params.date);
-
   return (
-    <div className="bg-white p-6 rounded-lg border border-stone-200 shadow-sm">
-      <h2 className="font-serif text-xl text-stone-800 mb-6 pb-3 border-b border-amber-200">
+    <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm transition-shadow hover:shadow-md">
+      <h2 className="font-serif text-xl text-black mb-6 pb-3 border-b border-gray-200 tracking-tight">
         Refine Results
       </h2>
 
       <Accordion
         type="multiple"
-        defaultValue={["rating", "date", "categories"]}
+        defaultValue={["rating", "categories"]}
         className="border-none"
       >
-        <AccordionItem value="rating" className="border-b border-stone-100">
-          <AccordionTrigger className="py-3 text-stone-700 hover:text-amber-800 hover:no-underline">
+        <AccordionItem value="rating" className="border-b border-gray-100">
+          <AccordionTrigger className="py-3 text-gray-800 hover:text-black font-medium hover:no-underline transition-colors">
             Rating
           </AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-3 pl-1">
+            <div className="space-y-4 pl-1 py-2">
               {[5, 4, 3, 2, 1].map((rating) => (
-                <div key={rating} className="flex items-center space-x-2">
+                <div key={rating} className="flex items-center space-x-3">
                   <input
                     type="radio"
+                    id={`rating-${rating}`}
                     name="radio"
                     onChange={() =>
                       setParams((prev) => ({
                         ...prev,
-                        RatingSummary: rating,
+                        RatingSummary:
+                          prev.RatingSummary === rating ? null : rating,
                       }))
                     }
-                    className="text-amber-600 border-stone-300"
+                    checked={params.RatingSummary === rating}
+                    className="w-4 h-4 text-black border-gray-300 focus:ring-gray-500"
                   />
                   <Label
-                    htmlFor={`rating`}
-                    className="flex items-center gap-1 text-stone-700"
+                    htmlFor={`rating-${rating}`}
+                    className="flex items-center gap-1.5 text-gray-700 cursor-pointer select-none"
                   >
                     {rating}{" "}
-                    <Star className="h-3 w-3 fill-amber-400 text-amber-400" /> &
-                    Up
+                    <Star className="h-3.5 w-3.5 fill-gray-800 text-gray-800" />{" "}
+                    & Up
                   </Label>
                 </div>
               ))}
@@ -102,61 +101,34 @@ export function FilterSidebar() {
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="date" className="border-b border-stone-100">
-          <AccordionTrigger className="py-3 text-stone-700 hover:text-amber-800 hover:no-underline">
-            Review Date
-          </AccordionTrigger>
-          <AccordionContent>
-            <div className="w-1/2 space-y-3 pl-1">
-              <div className="flex items-center space-x-2">
-                <DatePickerWithRange setParams={setParams} />
-              </div>
-              {/*
-              <div className="flex items-center space-x-2">
-                <label>
-                  End Date
-                  <input
-                    type="date"
-                    name="radio2"
-                    onChange={(e) =>
-                      setParams((prev) => ({
-                        ...prev,
-                        date: new Date(e.target.value).toISOString(),
-                      }))
-                    }
-                    className="w-full text-black border-stone-300"
-                  />
-                </label>
-              </div> */}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-
-        <AccordionItem value="categories" className="border-b border-stone-100">
-          <AccordionTrigger className="py-3 text-stone-700 hover:text-amber-800 hover:no-underline">
+        <AccordionItem value="categories" className="border-b border-gray-100">
+          <AccordionTrigger className="py-3 text-gray-800 hover:text-black font-medium hover:no-underline transition-colors">
             Product Categories
           </AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-3 pl-1">
+            <div className="space-y-4 pl-1 py-2">
               {["MOVIE", "TV_SHOW", "BOOK", "ELECTRONICS", "VEHICLE"].map(
                 (category) => (
-                  <div key={category} className="flex items-center space-x-2">
+                  <div key={category} className="flex items-center space-x-3">
                     <input
                       type="radio"
+                      id={`category-${category.toLowerCase()}`}
                       name="radio1"
                       onChange={() =>
                         setParams((prev) => ({
                           ...prev,
-                          category: category,
+                          category: prev.category === category ? "" : category,
                         }))
                       }
-                      className="text-amber-600 border-stone-300"
+                      checked={params.category === category}
+                      className="w-4 h-4 text-black border-gray-300 focus:ring-gray-500"
                     />
+
                     <Label
-                      htmlFor={`feature-${category.toLowerCase()}`}
-                      className="text-stone-700"
+                      htmlFor={`category-${category.toLowerCase()}`}
+                      className="text-gray-700 cursor-pointer select-none"
                     >
-                      {category}
+                      {formatCategoryName(category)}
                     </Label>
                   </div>
                 )
@@ -169,20 +141,29 @@ export function FilterSidebar() {
       <div className="mt-8 space-y-3">
         <Button
           onClick={onClickApplyFilters}
-          className="w-full bg-amber-700 hover:bg-amber-800 text-white"
+          className="w-full bg-black hover:bg-gray-800 text-white font-medium transition-colors"
         >
           Apply Filters
         </Button>
         <Button
           onClick={onClickResetAll}
           variant="outline"
-          className="w-full border-amber-200 text-stone-600 hover:bg-amber-50"
+          className="w-full border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-black transition-colors"
         >
           Reset All
         </Button>
       </div>
     </div>
   );
+}
+
+// Helper function to format category names
+function formatCategoryName(category: string): string {
+  // Convert snake case to title case with spaces
+  return category
+    .split("_")
+    .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+    .join(" ");
 }
 
 function Star(props: React.SVGProps<SVGSVGElement>) {

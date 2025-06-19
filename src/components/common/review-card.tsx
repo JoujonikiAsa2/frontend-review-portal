@@ -61,17 +61,16 @@ export function ReviewCard({
       </div>
 
       <p className="text-gray-700 line-clamp-3">{content}</p>
-      <p>
+
         <Link
           href={`/reviews/${id}`}
           key={id}
           className="block transition-transform hover:translate-x-1"
         >
-          <Button variant={"outline"} className="text-blue-400">
+          <Button variant={"outline"} className="text-blue-400  hover:cursor-pointer">
             Read More
           </Button>
         </Link>
-      </p>
       <Image
         src={imageUrl}
         alt="Product Image"

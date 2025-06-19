@@ -20,7 +20,6 @@ import {
 } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
@@ -33,6 +32,8 @@ import {
 } from "@/components/ui/sidebar";
 // import { auth } from "@/auth";
 import { useSession } from "next-auth/react";
+import { BadgeDollarSign, GitPullRequest, ListCollapse } from "lucide-react";
+import Link from "next/link";
 const adminBar = [
   {
     title: "Dashboard",
@@ -40,8 +41,8 @@ const adminBar = [
     icon: IconDashboard,
   },
   {
-    title: "AdminBar",
-    url: "#",
+    title: "Create Review",
+    url: "/dashboard/admin/create-review",
     icon: IconListDetails,
   },
   {
@@ -50,14 +51,9 @@ const adminBar = [
     icon: IconChartBar,
   },
   {
-    title: "Projects",
-    url: "#",
-    icon: IconFolder,
-  },
-  {
-    title: "Team",
-    url: "#",
-    icon: IconUsers,
+    title: "Review Requests",
+    url: "/dashboard/admin/review-request",
+    icon: GitPullRequest,
   },
 ];
 const userBar = [
@@ -67,119 +63,26 @@ const userBar = [
     icon: IconDashboard,
   },
   {
-    title: "User Bar",
-    url: "/dashboard/user/test",
+    title: "My Reviews",
+    url: "/dashboard/user/my-reviews",
     icon: IconListDetails,
   },
   {
-    title: "Analytics",
-    url: "#",
-    icon: IconChartBar,
+    title: "Create Review",
+    url: "/dashboard/user/create-review",
+    icon: ListCollapse,
   },
   {
-    title: "Projects",
-    url: "#",
-    icon: IconFolder,
-  },
-  {
-    title: "Team",
-    url: "#",
-    icon: IconUsers,
+    title: "Payment History",
+    url: "/dashboard/user/payment-history",
+    icon: BadgeDollarSign,
   },
 ];
-const Data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
-    {
-      title: "Get Help",
-      url: "#",
-      icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
-};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data, status } = useSession();
+  console.log("data from layout", data);
+
   console.log("from side bar", data);
   if (status === "loading") return <div>Loading...</div>;
   return (
@@ -191,17 +94,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+              <Link href="/">
+                <p className="border border-b-2 font-semibold mr-4 playwrite-ro text-3xl">
+                  Opinia
+                </p>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data?.user?.role === "admin" ? adminBar : userBar} />
-        <NavSecondary items={Data.navSecondary} className="mt-auto" />
+        <NavMain
+          items={
+            data?.user?.role.toLowerCase() === "admin" ? adminBar : userBar
+          }
+        />
       </SidebarContent>
       <SidebarFooter>
         <NavUser

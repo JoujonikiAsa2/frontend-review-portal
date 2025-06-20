@@ -1,6 +1,5 @@
 // src/redux/services/commentApi.ts
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import Cookies from 'js-cookie';
 
 interface Comment {
   id: string;

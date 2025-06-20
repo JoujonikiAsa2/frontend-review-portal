@@ -1,5 +1,5 @@
 "use client";
-import type { Review } from "@/types/review";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,13 +10,13 @@ import {
 import ArticleComments from "./reviews/chat";
 import { ThumbsUp, ThumbsDown, ArrowLeft, Star } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
 import CustomLoader from "./common/custom-loader";
+import { TReview } from "@/types/globals";
 
 export default function ReviewDetails({
   reviewItem,
 }: {
-  reviewItem: Review | null;
+  reviewItem: TReview | null;
 }) {
   const router = useRouter();
   const [isHelpful, setIsHelpful] = useState(0);
@@ -33,7 +33,7 @@ export default function ReviewDetails({
 
   const [updateVote, { isLoading: isUpdating }] = useUpdateVoteMutation();
 
-  const currentReview = review?.data;
+  const currentReview = (review as any)?.data;
 
   const handleBack = () => router.back();
 
@@ -97,8 +97,8 @@ export default function ReviewDetails({
   };
 
   return (
-    <div className="max-w-5xl mx-auto bg-white rounded-lg shadow-sm overflow-hidden">
-      {/* Header with back button */}
+    <div className="w-[70%] bg-white rounded-lg shadow-sm overflow-hidden">
+      {/* Header with bac button */}
       <div className="bg-foreground px-6 py-4 flex justify-between items-center">
         <h1 className="text-white font-bold text-lg">Review Details</h1>
         <button

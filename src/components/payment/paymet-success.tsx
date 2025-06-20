@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Download, Home, ShoppingBag } from "lucide-react";
+import { CheckCircle2, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,

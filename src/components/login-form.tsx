@@ -16,7 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { IAuth } from "@/types/globals";
 import { toast } from "sonner";

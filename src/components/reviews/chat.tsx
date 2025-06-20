@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
 interface Comment {
   id: string;
@@ -133,7 +134,7 @@ export default function ArticleComments({ articleId }: ArticleCommentsProps) {
         <form onSubmit={handleSubmit} className="mb-6">
           <div className="flex gap-3">
             {session?.user?.image ? (
-              <img
+              <Image
                 src={session.user.image || "/default-avatar.png"}
                 alt={session.user.name || "User"}
                 className="w-10 h-10 rounded-full"
@@ -177,7 +178,7 @@ export default function ArticleComments({ articleId }: ArticleCommentsProps) {
           comments.map((comment) => (
             <div key={comment.id} className="flex gap-3 p-3 border-b">
               {comment?.user?.imageUrl ? (
-                <img
+                <Image
                   src={comment.user?.imageUrl || "/default-avatar.png"}
                   alt={comment.user?.name || "User"}
                   className="w-10 h-10 rounded-full"
@@ -204,4 +205,4 @@ export default function ArticleComments({ articleId }: ArticleCommentsProps) {
       </div>
     </div>
   );
-}
+};

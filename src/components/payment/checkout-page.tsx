@@ -2,7 +2,6 @@
 import { confirmPayment, getSession } from "@/Services/Payments";
 import { getReviewDetails } from "@/Services/Reviews";
 import {
-  PaymentElement,
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
@@ -11,10 +10,8 @@ import React, { useEffect } from "react";
 import { FaCcAmex } from "react-icons/fa6";
 import { SiMastercard, SiVisa } from "react-icons/si";
 import { toast } from "sonner";
-import { auth } from "@/auth";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL as string;
 
 const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
   console.log(reviewId)
@@ -115,7 +112,7 @@ const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
       setClientSecret(result?.data?.clientSecret);
     };
     if (user && review?.price) fetchStripeSession();
-  }, [review?.price, user]);
+  }, [reviewId, review?.price, user]);
   
 
   const handleSubmit = async (e: React.FormEvent) => {

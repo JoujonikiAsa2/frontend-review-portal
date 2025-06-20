@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
@@ -20,7 +21,6 @@ import * as z from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -118,7 +118,6 @@ export default function ReviewForm() {
       fetchCurrentReviewData();
     }
   }, [formType, reviewId, form]);
-
   // Handle image preview
   useEffect(() => {
     if (imageFile) {

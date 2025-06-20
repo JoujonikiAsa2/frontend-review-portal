@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import { revalidateTag } from "next/cache";
@@ -17,9 +18,6 @@ export const getReviews = async (query: any) => {
       }
     }
 
-    // console.log("query", query)
-    console.log("query", query);
-
     const searchParams = new URLSearchParams();
 
     Object.entries(query).forEach(([key, value]) => {
@@ -29,8 +27,6 @@ export const getReviews = async (query: any) => {
     });
 
     const queryString = searchParams.toString();
-    console.log(queryString);
-    console.log(`Api url ${backend_url}/review?${queryString}`);
     const res = await fetch(`${backend_url}/review?${queryString}`, {
       method: "GET",
     });
@@ -38,8 +34,19 @@ export const getReviews = async (query: any) => {
     const result = await res.json();
     return result;
   } catch (error) {
-    console.log(error);
     throw new Error("Failed to fetch reviews");
+  }
+};
+export const getReviewCount = async () => {
+  try {
+    const res = await fetch(`${backend_url}/review/count`, {
+      method: "GET",
+    });
+
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    throw new Error("Failed to fetch count");
   }
 };
 
@@ -55,11 +62,9 @@ export const getReviewDetails = async (id: string, action?: string) => {
       },
     });
     const result = await res.json();
-    console.log("All reviews fetched", result);
 
     return result;
   } catch (error) {
-    console.log(error);
     throw new Error("Failed to fetch reviews");
   }
 };
@@ -79,20 +84,17 @@ export const getUnpublishedReviews = async () => {
     const result = await res.json();
     return result;
   } catch (error) {
-    console.log(error);
     throw new Error("Failed to fetch reviews");
   }
 };
 
 export const updateReviewStatus = async (
   reviewId: string,
-  actionType: string
+  actionType: string,
+  reason?: string
 ) => {
   try {
     const token = await getToken();
-    console.log(
-      `${backend_url}/review/${reviewId}?actionType=${actionType}`
-    );
     const res = await fetch(
       `${backend_url}/review/${reviewId}?actionType=${actionType}`,
       {
@@ -103,14 +105,12 @@ export const updateReviewStatus = async (
       }
     );
     const result = await res.json();
-    console.log("Review UPDATE result", result);
     if (!res.ok) {
       throw new Error("Failed to update review");
     }
     revalidateTag("unpublished-reviews");
     return result;
   } catch (error) {
-    console.log(error);
     throw new Error("Failed to fetch reviews");
   }
 };
@@ -130,7 +130,6 @@ export const getMyReviews = async () => {
     const result = await res.json();
     return result;
   } catch (error) {
-    console.log(error);
     throw new Error("Failed to fetch reviews");
   }
 };
@@ -146,12 +145,10 @@ export const createReview = async (payload: any) => {
       body: payload,
     });
     const result = await res.json();
-    console.log("Review result", result);
     return result;
   } catch (error) {}
 };
 export const deleteReview = async (reviewId: string) => {
-  console.log("reviewId", reviewId);
   try {
     const token = await getToken();
     const res = await fetch(`${backend_url}/review/delete/${reviewId}`, {
@@ -162,10 +159,8 @@ export const deleteReview = async (reviewId: string) => {
     });
     const result = await res.json();
     if (result.success) {
-      console.log("hitting");
       revalidateTag("reviews");
     }
-    console.log("Review UPDATE result", result);
     return result;
   } catch (error) {
     throw new Error("Failed to delete review");
@@ -182,7 +177,6 @@ export const updateReview = async (payload: any, reviewId: string) => {
       body: payload,
     });
     const result = await res.json();
-    console.log("Review UPDATE result", result);
     return result;
   } catch (error) {
     throw new Error("Failed to update review");

@@ -1,5 +1,5 @@
 "use client";
-import type { Review } from "@/types/review";
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,13 +10,13 @@ import {
 import ArticleComments from "./reviews/chat";
 import { ThumbsUp, ThumbsDown, ArrowLeft, Star } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
 import CustomLoader from "./common/custom-loader";
+import { TReview } from "@/types/globals";
 
 export default function ReviewDetails({
   reviewItem,
 }: {
-  reviewItem: Review | null;
+  reviewItem: TReview | null;
 }) {
   const router = useRouter();
   const [isHelpful, setIsHelpful] = useState(0);

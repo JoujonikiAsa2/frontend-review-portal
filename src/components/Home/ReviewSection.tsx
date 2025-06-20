@@ -1,14 +1,14 @@
 import { getReviews } from "@/Services/Reviews";
 import React from "react";
 import ReviewHomeCard from "./ReviewCard";
+import Link from "next/link";
+import { TReview } from "@/types/globals";
 
 const ReviewSection = async () => {
   const reviews = await getReviews({
     page: 1,
     limit: 4,
   });
-  
-  console.log("Reviews", reviews);
   
   return (
     <section className="w-full py-16 bg-white dark:bg-gray-900 transition-colors duration-300">
@@ -26,7 +26,7 @@ const ReviewSection = async () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {reviews?.data?.length > 0 &&
-            reviews?.data?.map((review) => (
+            reviews?.data?.map((review: TReview) => (
               <div key={review.id} className="h-96">
                 <ReviewHomeCard review={review} />
               </div>
@@ -35,7 +35,7 @@ const ReviewSection = async () => {
         
         {reviews?.data?.length > 0 && (
           <div className="mt-12 text-center">
-            <a 
+            <Link 
               href="/reviews" 
               className="inline-flex items-center px-6 py-3 border border-gray-800 dark:border-gray-200 text-base font-medium rounded-md text-gray-900 dark:text-white bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300"
             >
@@ -43,7 +43,7 @@ const ReviewSection = async () => {
               <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
               </svg>
-            </a>
+            </Link>
           </div>
         )}
       </div>

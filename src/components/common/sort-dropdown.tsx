@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,8 +12,7 @@ import { ChevronDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export function SortDropdown() {
-
-  const router = useRouter()
+  const router = useRouter();
 
   // sort data
   const sortData: Record<
@@ -55,7 +54,7 @@ export function SortDropdown() {
     router.push(`/reviews?${params.toString()}`);
   };
 
-  const [sortOption, setSortOption] = useState<any>(null);
+  const [sortOption, setSortOption] = useState<string | null>(null);
 
   //access the sortBy and sortOrder and pass it to sortchange
   const handleSortChange = (option: string) => {

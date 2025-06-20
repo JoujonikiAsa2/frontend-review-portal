@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import { Facebook, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
-
+import { Button } from '../ui/button';
 export default function Footer() {
   return (
-    <footer className="py-16 px-6 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+    <footer className="py-16 px-6 bg-background border-t border-gray-200 dark:border-gray-800">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Logo and Newsletter Section */}
@@ -21,11 +21,11 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Your email here"
-                className="border border-gray-300 dark:border-gray-700 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white"
+                className="border border-gray-300 dark:border-gray-700 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent dark:text-white"
               />
-              <button className="border border-gray-300 dark:border-gray-700 px-6 py-2 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200 text-gray-800 dark:text-white">
-                Join
-              </button>
+              <Button size="lg" className="border text-black dark:text-white hover:cursor-pointer hover:scale-102">
+                              Join
+                            </Button>
             </div>
 
             <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">

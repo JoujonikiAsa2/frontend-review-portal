@@ -42,7 +42,7 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
   };
 
   return (
-    <div className="flex items-center justify-center space-x-2">
+    <div className="flex items-center justify-center space-x-2 pb-10">
       <Button
         variant="outline"
         size="icon"
@@ -61,7 +61,7 @@ export function Pagination({ totalPages, currentPage }: PaginationProps) {
           size="icon"
           className={`w-9 ${
             page === p
-              ? "bg-amber-700 hover:bg-amber-800 text-white"
+              ? "bg-green-600 hover:bg-green-600/20 text-white"
               : "border-stone-200 text-stone-700 hover:bg-amber-50 hover:text-amber-800 hover:border-amber-200"
           }`}
           onClick={() => handleClick(p)}

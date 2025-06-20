@@ -54,8 +54,8 @@ export function FilterSidebar() {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm transition-shadow hover:shadow-md">
-      <h2 className="font-serif text-xl text-black mb-6 pb-3 border-b border-gray-200 tracking-tight">
+    <div className="bg-card p-6 border border-gray-100 dark:border-gray-700 rounded-lg shadow-sm transition-shadow hover:shadow-md text-black dark:text-white">
+      <h2 className="font-serif text-xl  mb-6 pb-3 border-b border-gray-200 tracking-tight">
         Refine Results
       </h2>
 
@@ -65,7 +65,7 @@ export function FilterSidebar() {
         className="border-none"
       >
         <AccordionItem value="rating" className="border-b border-gray-100">
-          <AccordionTrigger className="py-3 text-gray-800 hover:text-black font-medium hover:no-underline transition-colors">
+          <AccordionTrigger className="py-3 text-black dark:text-white font-medium hover:no-underline transition-colors">
             Rating
           </AccordionTrigger>
           <AccordionContent>
@@ -88,10 +88,10 @@ export function FilterSidebar() {
                   />
                   <Label
                     htmlFor={`rating-${rating}`}
-                    className="flex items-center gap-1.5 text-gray-700 cursor-pointer select-none"
+                    className="flex items-center gap-1.5 cursor-pointer select-none"
                   >
                     {rating}{" "}
-                    <Star className="h-3.5 w-3.5 fill-gray-800 text-gray-800" />{" "}
+                    <Star className="h-3.5 w-3.5 fill-yellow-600 text-yellow-600" />{" "}
                     & Up
                   </Label>
                 </div>
@@ -101,7 +101,7 @@ export function FilterSidebar() {
         </AccordionItem>
 
         <AccordionItem value="categories" className="border-b border-gray-100">
-          <AccordionTrigger className="py-3 text-gray-800 hover:text-black font-medium hover:no-underline transition-colors">
+          <AccordionTrigger className="py-3 font-medium hover:no-underline transition-colors">
             Product Categories
           </AccordionTrigger>
           <AccordionContent>
@@ -120,12 +120,12 @@ export function FilterSidebar() {
                         }))
                       }
                       checked={params.category === category}
-                      className="w-4 h-4 text-black border-gray-300 focus:ring-gray-500"
+                      className="w-4 h-4 border-gray-300 focus:ring-gray-500"
                     />
 
                     <Label
                       htmlFor={`category-${category.toLowerCase()}`}
-                      className="text-gray-700 cursor-pointer select-none"
+                      className="cursor-pointer select-none"
                     >
                       {formatCategoryName(category)}
                     </Label>
@@ -140,14 +140,14 @@ export function FilterSidebar() {
       <div className="mt-8 space-y-3">
         <Button
           onClick={onClickApplyFilters}
-          className="w-full bg-black hover:bg-gray-800 text-white font-medium transition-colors"
+          className="w-full text-white font-medium transition-colors"
         >
           Apply Filters
         </Button>
         <Button
           onClick={onClickResetAll}
           variant="outline"
-          className="w-full border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-black transition-colors"
+          className="w-full border-gray-300 transition-colors"
         >
           Reset All
         </Button>

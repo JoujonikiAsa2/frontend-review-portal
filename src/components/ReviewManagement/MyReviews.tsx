@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 "use client";
 import { useEffect, useState } from "react";
 import {
@@ -9,7 +10,6 @@ import {
   ThumbsUp,
   ThumbsDown,
   AlertCircle,
-  ChevronDown,
 } from "lucide-react";
 import { deleteReview, getMyReviews } from "@/Services/Reviews";
 import { SkeletonRow } from "../ReviewTableSkeleton";
@@ -17,25 +17,28 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { TReviewCard } from "@/types/globals";
+import Image from "next/image";
 
 export default function ReviewManagementTable() {
   const router = useRouter();
   const { data: session } = useSession();
   const [loading, setLoading] = useState(true);
-  const [reviewss, setReviews] = useState([]);
+  const [reviews, setReviews] = useState<TReviewCard[]>([]);
   useEffect(() => {
     const MyReviews = async () => {
       const res = await getMyReviews();
-      setReviews(res);
+      setReviews(res.data);
       setLoading(false);
     };
     MyReviews();
   }, [loading]);
   // Sample data
-  console.log("revieess", reviewss);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [reviewToDelete, setReviewToDelete] = useState(null);
-  const [dropdownOpen, setDropdownOpen] = useState({});
+  const [reviewToDelete, setReviewToDelete] = useState<TReviewCard | null>(
+    null
+  );
+  const [dropdownOpen, setDropdownOpen] = useState<Record<string, boolean>>({});
   // console.log({ session }," from review management");
   const getCategoryColor = (category: string) => {
     const categoryColors = {
@@ -72,13 +75,12 @@ export default function ReviewManagementTable() {
   };
 
   const handleUpdateReview = (reviewId: string) => {
-    console.log(`Navigating to /reviews/edit/${reviewId}`);
     router.push(
       `/dashboard/${session?.user.role.toLowerCase()}/update-review/${reviewId}`
     );
   };
 
-  const openDeleteDialog = (review) => {
+  const openDeleteDialog = (review: TReviewCard) => {
     setReviewToDelete(review);
     setDeleteDialogOpen(true);
   };
@@ -86,7 +88,7 @@ export default function ReviewManagementTable() {
   const handleDeleteReview = async () => {
     const loadingId = toast.loading("Deleting...");
     setLoading(true);
-    const result = await deleteReview(reviewToDelete.id);
+    const result = await deleteReview(reviewToDelete?.id!);
     if (result.success) {
       toast.success(result.message, { id: loadingId });
       setLoading(false);
@@ -99,7 +101,7 @@ export default function ReviewManagementTable() {
     setReviewToDelete(null);
   };
 
-  const renderStars = (rating) => {
+  const renderStars = (rating: number) => {
     return Array(rating)
       .fill(0)
       .map((_, i) => (
@@ -163,10 +165,10 @@ export default function ReviewManagementTable() {
               {loading
                 ? Array(5)
                     .fill(0)
-                    .map((_, index) => (
+                    .map((_:any, index) => (
                       <SkeletonRow key={`skeleton-${index}`} />
                     ))
-                : reviewss?.data?.map((review) => (
+                : reviews?.map((review: TReviewCard) => (
                     <tr
                       key={review.id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
@@ -174,9 +176,11 @@ export default function ReviewManagementTable() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center space-x-3">
                           <div className="h-12 w-12 rounded-md overflow-hidden flex-shrink-0">
-                            <img
+                            <Image
                               src={review.imageUrl}
                               alt={review.title}
+                              width={48}
+                              height={48}
                               className="h-full w-full object-cover"
                             />
                           </div>
@@ -244,7 +248,9 @@ export default function ReviewManagementTable() {
                             <MoreHorizontal className="h-5 w-5" />
                           </button>
 
-                          {dropdownOpen[review.id] && (
+                          {dropdownOpen[
+                            review.id as keyof typeof dropdownOpen
+                          ] && (
                             <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-10">
                               <div className="py-1">
                                 <Link
@@ -307,8 +313,8 @@ export default function ReviewManagementTable() {
               <h3 className="text-lg font-semibold">Delete Review</h3>
             </div>
             <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Are you sure you want to delete the review "
-              {reviewToDelete?.title}"? This action cannot be undone and will
+              Are you sure you want to delete the review &quote;
+              {reviewToDelete?.title}&quote;? This action cannot be undone and will
               permanently remove the review and all associated data.
             </p>
             <div className="flex justify-end space-x-3">

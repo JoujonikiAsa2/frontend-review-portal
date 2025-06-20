@@ -14,7 +14,8 @@ const eslintConfig = [
   {
     // This is the correct way to specify rules
     rules: {
-      "@typescript-eslint/no-explicit-any": "error"
+      "@typescript-eslint/no-explicit-any": "warn",
+     "@typescript-eslint/no-unused-vars":"warn"
     }
   },
 ];

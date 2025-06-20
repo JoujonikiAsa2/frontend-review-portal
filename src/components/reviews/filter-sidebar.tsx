@@ -12,7 +12,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useRouter } from "next/navigation";
-// import { DatePickerWithRange } from "./date-range-picker";
 
 export function FilterSidebar() {
   const router = useRouter();
@@ -29,9 +28,9 @@ export function FilterSidebar() {
   //filtered the empty params
   const filteredParams = Object.fromEntries(
     Object.entries(params).filter(
-      ([_, value]) => value !== "" && value !== null && value !== undefined
+      ([, value]) => value !== "" && value !== null && value !== undefined
     )
-  );
+  ) as Record<string, string | number>;
 
   //set the filtered params into searchUrl
   Object.entries(filteredParams).forEach(([key, value]) => {

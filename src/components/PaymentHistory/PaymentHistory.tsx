@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useCallback, useState } from "react";
 import useFetch from "@/hooks/useDataFetch";
 
@@ -11,8 +10,6 @@ import {
   Check,
   X,
   Download,
-  ChevronDown,
-  ChevronRight,
   Search,
 } from "lucide-react";
 import {
@@ -33,19 +30,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { getPaymentHistory } from "@/Services/Payment";
 import { useSession } from "next-auth/react";
 import { getUsersAllPayments } from "@/Services/Payments";
 
 // Helper function to format date
-const formatDate = (dateString) => {
+const formatDate = (dateString: string) => {
   if (!dateString) return "N/A";
   return format(new Date(dateString), "MMM dd, yyyy • hh:mm a");
 };
 
 // Helper function for payment status badge
-const PaymentStatusBadge = ({ status }) => {
-  const statusStyles = {
+const PaymentStatusBadge = ({ status }: { status: "CONFIRMED" | "PENDING" | "FAILED" | "REFUNDED" }) => {
+  const statusStyles: Record<"CONFIRMED" | "PENDING" | "FAILED" | "REFUNDED", string> = {
     CONFIRMED: "bg-black text-white",
     PENDING: "bg-gray-200 text-gray-800",
     FAILED: "bg-red-100 text-red-800",
@@ -53,7 +49,7 @@ const PaymentStatusBadge = ({ status }) => {
   };
 
   return (
-    <Badge className={`${statusStyles[status] || "bg-gray-100"} font-medium`}>
+    <Badge className={`${statusStyles[status as keyof typeof statusStyles] || "bg-gray-100"} font-medium`}>
       {status === "CONFIRMED" && <Check className="w-3 h-3 mr-1" />}
       {status === "FAILED" && <X className="w-3 h-3 mr-1" />}
       {status}
@@ -62,7 +58,21 @@ const PaymentStatusBadge = ({ status }) => {
 };
 
 // Receipt component for mobile view
-const PaymentReceipt = ({ payment }) => {
+interface Payment {
+  id: string;
+  paymentStatus: "CONFIRMED" | "PENDING" | "FAILED" | "REFUNDED";
+  amount: number;
+  currency?: string;
+  completedAt?: string;
+  createdAt?: string;
+  paymentMethod?: string;
+  transactionId?: string;
+  email?: string;
+  paymentType?: string;
+  reviewId: string;
+}
+
+const PaymentReceipt = ({ payment }: { payment: Payment }) => {
   return (
     <div className="border border-gray-200 rounded-lg p-4 mb-4">
       <div className="flex justify-between items-start mb-4">
@@ -86,7 +96,7 @@ const PaymentReceipt = ({ payment }) => {
         <div>
           <span className="text-xs text-gray-500">Date</span>
           <p className="text-sm">
-            {formatDate(payment.completedAt || payment.createdAt)}
+            {formatDate(payment.completedAt || payment.createdAt || "")}
           </p>
         </div>
 
@@ -147,19 +157,22 @@ const PaymentReceipt = ({ payment }) => {
 
 const PaymentHistory = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, ] = useState(1);
   const { data: session } = useSession();
   // Fetch payment history data
-  const fetchPaymentHistory = useCallback(() => {
-    return getUsersAllPayments(session?.user.email!);
-  }, [currentPage, searchTerm]);
+ // Fetch payment history data
+ const fetchPaymentHistory = useCallback(() => {
+  if (!session?.user?.email) {
+    return Promise.resolve([]); // Handle undefined email safely
+  }
+  return getUsersAllPayments(session.user.email);
+}, [session?.user?.email]);
 
   const { data, loading, error } = useFetch(fetchPaymentHistory);
-  console.log("data", data);
+  // console.log("data", data);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    // The search is triggered by the state change and the useCallback dependency
+  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
   };
 
   return (
@@ -218,11 +231,11 @@ const PaymentHistory = () => {
                   </TableHeader>
                   <TableBody>
                     {data?.data?.length > 0 ? (
-                      data.data.map((payment) => (
+                      data.data.map((payment: Payment) => (
                         <TableRow key={payment.id} className="hover:bg-gray-50">
                           <TableCell className="font-medium">
                             {formatDate(
-                              payment.completedAt || payment.createdAt
+                              payment.completedAt || payment.createdAt || ""
                             )}
                           </TableCell>
                           <TableCell className="font-mono text-sm">
@@ -282,7 +295,7 @@ const PaymentHistory = () => {
               {/* Mobile View - Cards */}
               <div className="md:hidden">
                 {data?.data?.length > 0 ? (
-                  data.data.map((payment) => (
+                  data.data.map((payment: Payment) => (
                     <PaymentReceipt key={payment.id} payment={payment} />
                   ))
                 ) : (

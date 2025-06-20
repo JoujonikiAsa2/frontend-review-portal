@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import Image from "next/image";
 import { Card } from "../ui/card";
 import { ReviewRating } from "./review-rating";

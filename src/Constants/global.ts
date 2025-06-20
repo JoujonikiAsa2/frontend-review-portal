@@ -1,27 +1,9 @@
 import { IconDashboard, IconListDetails } from "@tabler/icons-react";
 import {
   BadgeDollarSign,
-  ChartColumnStacked,
   ListCollapse,
 } from "lucide-react";
 
-const adminBar = [
-  {
-    title: "Dashboard",
-    url: "/dashboard/admin",
-    icon: IconDashboard,
-  },
-  {
-    title: "Create Review",
-    url: "/dashboard/admin/create-review",
-    icon: IconListDetails,
-  },
-  {
-    title: "Create Category",
-    url: "#",
-    icon: ChartColumnStacked,
-  },
-];
 export const userBar = [
   {
     title: "Dashboard",

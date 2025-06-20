@@ -11,30 +11,30 @@ import {
   AlertCircle,
 } from "lucide-react";
 import {
-  getMyReviews,
   getUnpublishedReviews,
   updateReviewStatus,
 } from "@/Services/Reviews";
 import { SkeletonRow } from "../ReviewTableSkeleton";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+import { TReviewCard } from "@/types/globals";
+import Image from "next/image";
 
 export default function ReviewApprovalTable() {
-  const { data: session } = useSession();
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
-  const [reviewss, setReviews] = useState([]);
-  const [dropdownOpen, setDropdownOpen] = useState({});
+  const [reviewss, setReviews] = useState<TReviewCard[]>([]);
+  const [dropdownOpen, setDropdownOpen] = useState<Record<string, boolean>>({});
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
-  const [reviewToReject, setReviewToReject] = useState(null);
+  const [reviewToReject, setReviewToReject] = useState<TReviewCard | null>(
+    null
+  );
   const [rejectionReason, setRejectionReason] = useState("");
-
   useEffect(() => {
     const fetchReviews = async () => {
       try {
         const res = await getUnpublishedReviews();
-        setReviews(res);
+        setReviews(res.data);
       } catch (error) {
         console.error("Error fetching reviews:", error);
         toast.error("Failed to load reviews");
@@ -46,7 +46,7 @@ export default function ReviewApprovalTable() {
     fetchReviews();
   }, [actionLoading]);
 
-  const getCategoryColor = (category) => {
+  const getCategoryColor = (category: string) => {
     const categoryColors = {
       BOOK: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
       ELECTRONICS:
@@ -59,20 +59,20 @@ export default function ReviewApprovalTable() {
     };
 
     return (
-      categoryColors[category] ||
+      categoryColors[category as keyof typeof categoryColors] ||
       "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
     );
   };
 
-  const getStatusColor = (status) => {
-    if (status === "PUBLISHED" || status === true)
+  const getStatusColor = (status: boolean) => {
+    if (status === true)
       return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300";
-    if (status === "REJECTED")
-      return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300";
+    if (status === false)
+      return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300";
     return "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300"; // PENDING or Draft
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
       year: "numeric",
@@ -81,15 +81,14 @@ export default function ReviewApprovalTable() {
     });
   };
 
-  const toggleDropdown = (id) => {
+  const toggleDropdown = (id: string) => {
     setDropdownOpen((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
   };
 
-  const handleApproveReview = async (reviewId) => {
-    console.log("review id", reviewId);
+  const handleApproveReview = async (reviewId: string) => {
     setActionLoading(true);
     const loadingId = toast.loading("Publishing review...");
     try {
@@ -108,7 +107,7 @@ export default function ReviewApprovalTable() {
     }
   };
 
-  const openRejectDialog = (review) => {
+  const openRejectDialog = (review: TReviewCard) => {
     setReviewToReject(review);
     setRejectionReason("");
     setRejectDialogOpen(true);
@@ -121,14 +120,13 @@ export default function ReviewApprovalTable() {
     setActionLoading(true);
     const loadingId = toast.loading("Rejecting review...");
     try {
-      console.log("rejected id", reviewToReject.id);
-      await updateReviewStatus(reviewToReject.id, "REJECTED", rejectionReason);
+      await updateReviewStatus(reviewToReject.id, "REJECTED");
 
       // Update local state
       setReviews((prev) => {
         return {
           ...prev,
-          data: prev.data.map((review) =>
+          data: prev.map((review) =>
             review.id === reviewToReject.id
               ? {
                   ...review,
@@ -152,7 +150,7 @@ export default function ReviewApprovalTable() {
     }
   };
 
-  const renderStars = (rating) => {
+  const renderStars = (rating: number) => {
     return Array(rating)
       .fill(0)
       .map((_, i) => (
@@ -160,10 +158,10 @@ export default function ReviewApprovalTable() {
       ));
   };
 
-  const getStatusDisplay = (review) => {
+  const getStatusDisplay = (review: TReviewCard) => {
     // Handle both status field or isPublished boolean
-    if (review.status === "REJECTED") return "Rejected";
-    if (review.status === "PUBLISHED" || review.isPublished) return "Published";
+    if (review.isPublished === false) return "Pending";
+    if (review.isPublished === true || review.isPublished) return "Published";
     return "Pending";
   };
 
@@ -226,7 +224,7 @@ export default function ReviewApprovalTable() {
                     .map((_, index) => (
                       <SkeletonRow key={`skeleton-${index}`} />
                     ))
-                : reviewss?.data?.map((review) => (
+                : reviewss?.map((review) => (
                     <tr
                       key={review.id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
@@ -234,7 +232,7 @@ export default function ReviewApprovalTable() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center space-x-3">
                           <div className="h-12 w-12 rounded-md overflow-hidden flex-shrink-0">
-                            <img
+                            <Image
                               src={review.imageUrl}
                               alt={review.title}
                               className="h-full w-full object-cover"
@@ -284,7 +282,7 @@ export default function ReviewApprovalTable() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
-                            review.status || review.isPublished
+                            review.isPublished
                           )}`}
                         >
                           {getStatusDisplay(review)}
@@ -315,9 +313,7 @@ export default function ReviewApprovalTable() {
                                 </Link>
 
                                 {/* Show these buttons only for pending reviews */}
-                                {(!review.status ||
-                                  (!review.isPublished &&
-                                    review.status !== "REJECTED")) && (
+                                {!review.isPublished && (
                                   <>
                                     <button
                                       className="flex items-center px-4 py-2 text-sm text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 w-full text-left"
@@ -341,8 +337,7 @@ export default function ReviewApprovalTable() {
                                 )}
 
                                 {/* For already published reviews - option to reject */}
-                                {(review.status === "PUBLISHED" ||
-                                  review.isPublished) && (
+                                {review.isPublished && (
                                   <button
                                     className="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 w-full text-left"
                                     onClick={() => openRejectDialog(review)}
@@ -354,7 +349,7 @@ export default function ReviewApprovalTable() {
                                 )}
 
                                 {/* For rejected reviews - option to approve */}
-                                {review.status === "REJECTED" && (
+                                {!review.isPublished && (
                                   <button
                                     className="flex items-center px-4 py-2 text-sm text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 w-full text-left"
                                     onClick={() =>
@@ -373,7 +368,7 @@ export default function ReviewApprovalTable() {
                       </td>
                     </tr>
                   ))}
-              {!loading && (!reviewss?.data || reviewss.data.length === 0) && (
+              {!loading && (!reviewss?.length || reviewss.length === 0) && (
                 <tr>
                   <td
                     colSpan={7}
@@ -390,8 +385,8 @@ export default function ReviewApprovalTable() {
                   colSpan={7}
                   className="px-6 py-3 text-center text-sm text-gray-500 dark:text-gray-400"
                 >
-                  Showing {reviewss?.data?.length || 0} of{" "}
-                  {reviewss?.data?.length || 0} reviews
+                  Showing {reviewss?.length || 0} of {reviewss?.length || 0}{" "}
+                  reviews
                 </td>
               </tr>
             </tfoot>
@@ -408,8 +403,8 @@ export default function ReviewApprovalTable() {
               <h3 className="text-lg font-semibold">Reject Review</h3>
             </div>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-              Are you sure you want to reject the review "
-              {reviewToReject?.title}"?
+              Are you sure you want to reject the review &quote;
+              {reviewToReject?.title}&quote;?
             </p>
             <div className="mb-4">
               <label

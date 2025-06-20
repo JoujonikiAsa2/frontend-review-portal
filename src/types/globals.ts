@@ -17,6 +17,8 @@ export type TPaymentPayload = {
   amount?: number;
   name: string;
   transactionId: string;
+  currency: string
+  paymentType: "PREPAYMENT" | "POSTPAYMENT"
   paymentStatus: "CONFIRMED" | "PENDING" | "FAILED" | "CANCEL" | "REFUND";
   paymentMethod?: string;
   completedAt?:string;
@@ -35,6 +37,8 @@ export type TReview = {
   price?: number;
   user: TUser;
   Comment: Comment[];
+  createdAt: string;
+  updatedAt: string
 };
 
 export type Comment = {
@@ -48,26 +52,41 @@ export type Comment = {
   review: TReview;
 };
 
+export type TQuery = {
+  searchTerm?:string,
+  title?:string,
+  category?:string,
+  RatingSummary?:number,
+  startDate?:string,
+  endDate?:string
+}
 
-// export type TReview = {
-//   id: string;
-//   title: string;
-//   description: string;
-//   userId: string;
-//   imageUrl: string;
-//   category: "ELECTRONICS" | string;
-//   upVotes: number;
-//   downVotes: number;
-//   isPremium: boolean;
-//   RatingSummary: number;
-//   isPublished: boolean;
-//   createdAt: string;
-//   updatedAt: string;
-//   price: number;
-//   user: {
-//     id: string;
-//     name: string;
-//     email: string;
-//     imageUrl: string | null;
-//   };
-// };
+export type TOption = {
+  page?:string,
+  limit?:string,
+  sort?:string,
+  sortOrder?:string
+}
+
+export type TReviewCard = {
+  id: string;
+  title: string;
+  description: string;
+  userId: string;
+  imageUrl: string;
+  category: "ELECTRONICS" | string;
+  upVotes: number;
+  downVotes: number;
+  isPremium: boolean;
+  RatingSummary: number;
+  isPublished: boolean;
+  createdAt: string;
+  updatedAt: string;
+  price: number;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    imageUrl: string | null;
+  };
+};

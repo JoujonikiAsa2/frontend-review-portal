@@ -9,8 +9,7 @@ import { ReviewCard } from "../common/review-card";
 import { Pagination } from "../common/pagination";
 import CustomLoader from "../common/custom-loader";
 import { useSearchParams } from "next/navigation";
-import { useAppSelector } from "@/redux/hooks";
-import { selectCurrentToken } from "@/redux/features/authSlice";
+import { TReview } from "@/types/globals";
 
 const ReviewsList = () => {
   const searchParams = useSearchParams();
@@ -26,29 +25,25 @@ const ReviewsList = () => {
   const startDate = searchParams.get("startDate");
   const endDate = searchParams.get("endDate");
 
-  //set the params data to a objects
-  const queryData = {
-    searchTerm,
-    RatingSummary,
-    date,
-    category,
-    page,
-    sortBy,
-    sortOrder,
-    startDate,
-    endDate,
-  };
+  const filteredQueryData = React.useMemo(() => {
+    //set the params data to a objects
+    const queryData = {
+      searchTerm,
+      RatingSummary,
+      date,
+      category,
+      page,
+      sortBy,
+      sortOrder,
+      startDate,
+      endDate,
+    };
 
-  //filtered the empty params
-  const filteredQueryData = Object.fromEntries(
-    Object.entries(queryData).filter(
-      ([_, value]) => value !== "" && value !== null && value !== undefined
-    )
-  );
-
-  //call back function to fetch data
-  const fetchReviews = useCallback(() => {
-    return getReviews(filteredQueryData);
+    return Object.fromEntries(
+      Object.entries(queryData).filter(
+        ([, value]) => value !== "" && value !== null && value !== undefined
+      )
+    );
   }, [
     searchTerm,
     RatingSummary,
@@ -61,11 +56,12 @@ const ReviewsList = () => {
     endDate,
   ]);
 
-  const { data, loading, error, refetch } = useFetch(fetchReviews);
+  //call back function to fetch data
+  const fetchReviews = useCallback(() => {
+    return getReviews(filteredQueryData);
+  }, [filteredQueryData]);
 
-  const accessToken = useAppSelector(selectCurrentToken);
-
-  console.log({ accessToken });
+  const { data, loading } = useFetch(fetchReviews);
 
   return (
     <div className="min-h-screen bg-white">
@@ -108,20 +104,20 @@ const ReviewsList = () => {
               {data?.data?.length !== 0 ? (
                 <div className="grid gap-8">
                   {!loading ? (
-                    data?.data?.map((review: any) => (
+                    data?.data?.map((review: TReview) => (
                       <ReviewCard
                         key={review?.id}
-                        id={review?.id}
+                        id={review?.id as string}
                         title={review?.title}
-                        category={review.category}
-                        imageUrl={review?.imageUrl}
-                        rating={review?.RatingSummary}
-                        name={review?.user.name}
-                        date={review?.createdAt}
-                        content={review?.description}
-                        upVotes={review?.upVotes}
-                        downVotes={review?.downVotes}
-                        verified={review?.isPremium}
+                        category={review.category as string}
+                        imageUrl={review?.imageUrl as string}
+                        rating={review?.RatingSummary as number}
+                        name={review?.user.name as string}
+                        date={review?.createdAt as string}
+                        content={review?.description as string}
+                        upVotes={review?.upVotes as number}
+                        downVotes={review?.downVotes as number}
+                        verified={review?.isPremium as boolean}
                       />
                     ))
                   ) : (

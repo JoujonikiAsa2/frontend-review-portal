@@ -10,7 +10,7 @@ import {
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
 import { Menu, Moon, MoveRight, Sun, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -24,8 +24,6 @@ import { signOut, useSession } from "next-auth/react";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import deleteTokenFromCookie from "@/Helpers/deleteTokenFromCookie";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Banner from "@/components/Home/Banner";
-import ReviewSection from "@/components/Home/ReviewSection";
 import { navigationItems } from "../Home/Constants";
 
 const Header = () => {

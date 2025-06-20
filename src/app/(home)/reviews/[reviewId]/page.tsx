@@ -1,9 +1,9 @@
 import ReviewDetails from "@/components/ReviewDetails";
-import { Review } from "@/types/review";
+import { TReviewCard } from "@/types/globals";
 import { notFound } from "next/navigation";
 
 
-async function getReviewById(id: string): Promise<Review | null> {
+async function getReviewById(id: string): Promise<TReviewCard | null> {
   try {
     const res = await fetch(
       `https://backend-server-review-portal.vercel.app/api/v1/review/${id}`,
@@ -12,7 +12,6 @@ async function getReviewById(id: string): Promise<Review | null> {
       }
     );
     const json = await res.json();
-
     if (!res.ok || !json.success) return null;
 
     return json.data;

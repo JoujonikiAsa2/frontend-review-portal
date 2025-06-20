@@ -70,22 +70,22 @@ export function SortDropdown() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="flex items-center gap-1 border-stone-200 text-stone-700 hover:bg-amber-50 hover:text-amber-800 hover:border-amber-200"
+          className="flex items-center gap-1 hover:bg-amber-50"
         >
           Sort by
           <ChevronDown className="h-4 w-4 ml-1 text-amber-600" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="border-stone-200">
+      <DropdownMenuContent align="end" className="border">
         {Object.keys(sortData).map((option) => (
           <DropdownMenuItem
             key={option}
             onClick={() => handleSortChange(option)}
             className={`${
               sortOption === option
-                ? "bg-amber-50 text-amber-800"
-                : "text-stone-700"
-            } focus:bg-amber-50 focus:text-amber-800`}
+                ? "bg-amber-50 text-black"
+                : ""
+            } focus:bg-white focus:text-black`}
           >
             {option}
           </DropdownMenuItem>

@@ -5,11 +5,11 @@ import { getReviews } from "@/Services/Reviews";
 import { SearchBar } from "../common/search-bar";
 import { FilterSidebar } from "./filter-sidebar";
 import { SortDropdown } from "../common/sort-dropdown";
-import { ReviewCard } from "../common/review-card";
 import { Pagination } from "../common/pagination";
 import CustomLoader from "../common/custom-loader";
 import { useSearchParams } from "next/navigation";
-import { TReview } from "@/types/globals";
+import { TReviewCard } from "@/types/globals";
+import ReviewHomeCard from "../Home/ReviewCard";
 
 const ReviewsList = () => {
   const searchParams = useSearchParams();
@@ -64,13 +64,12 @@ const ReviewsList = () => {
   const { data, loading } = useFetch(fetchReviews);
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-7xl mx-auto">
+    <div className="min-h-[50vh000] dark:bg-[#121212]">
+        <div className="bg-[#F9FAFB] dark:bg-background py-20">
           {/* Header with modern, minimalist styling */}
           <div className="relative mb-12 text-center">
             <div className="absolute left-0 right-0 top-1/2 border-t border-gray-200 -z-10"></div>
-            <h1 className="inline-block px-8 text-4xl font-serif font-bold text-black bg-white relative">
+            <h1 className="inline-block px-8 text-4xl font-bold text-black dark:text-white relative">
               Customer Reviews
             </h1>
           </div>
@@ -79,18 +78,19 @@ const ReviewsList = () => {
           <div className="mb-10 max-w-3xl mx-auto">
             <SearchBar />
           </div>
-
+        </div>
+        <div className="max-w-7xl mx-auto mt-10 pb-10">
           <div className="flex flex-col md:flex-row gap-10">
             {/* Filter Sidebar */}
-            <div className="w-full md:w-72 shrink-0">
+            <div className="w-full md:w-72 shrink-0 pb-10">
               <FilterSidebar />
             </div>
 
             {/* Main Content */}
             <div className="flex-1">
               {/* Sort Controls with monochromatic styling */}
-              <div className="flex justify-between items-center mb-8 border-b border-gray-200 pb-4">
-                <p className="text-gray-600 font-light">
+              <div className="flex justify-between items-center mb-8">
+                <p className=" text-black dark:text-white font-normal">
                   Showing{" "}
                   {data?.data?.length > 10
                     ? data?.meta?.limit
@@ -102,31 +102,20 @@ const ReviewsList = () => {
 
               {/* Reviews List with enhanced spacing */}
               {data?.data?.length !== 0 ? (
-                <div className="grid gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start border-t pt-4">
                   {!loading ? (
-                    data?.data?.map((review: TReview) => (
-                      <ReviewCard
-                        key={review?.id}
-                        id={review?.id as string}
-                        title={review?.title}
-                        category={review.category as string}
-                        imageUrl={review?.imageUrl as string}
-                        rating={review?.RatingSummary as number}
-                        name={review?.user.name as string}
-                        date={review?.createdAt as string}
-                        content={review?.description as string}
-                        upVotes={review?.upVotes as number}
-                        downVotes={review?.downVotes as number}
-                        verified={review?.isPremium as boolean}
-                      />
+                    data?.data?.map((review: TReviewCard) => (
+                      <div key={review.id} className="h-96">
+                        <ReviewHomeCard review={review} />
+                      </div>
                     ))
                   ) : (
-                    <CustomLoader />
+                    <div className="col-span-3 flex justify-start items-start"><CustomLoader /></div>
                   )}
                 </div>
               ) : (
                 <div className="w-full h-[60vh] flex items-center justify-center">
-                  <p className="text-lg font-medium text-gray-800">
+                  <p className="text-lg font-medium text-black dark:text-white">
                     No reviews available
                   </p>
                 </div>
@@ -135,9 +124,8 @@ const ReviewsList = () => {
               {/* Pagination with minimalist design */}
               {data?.data?.length >= 5 && (
                 <div className="mt-16 relative">
-                  <div className="absolute left-0 right-0 top-1/2 border-t border-gray-200 -z-10"></div>
                   <div className="flex justify-center">
-                    <div className="inline-block px-6 bg-white">
+                    <div className="inline-block px-6">
                       <Pagination
                         totalPages={data?.meta?.totalPage}
                         currentPage={data?.meta?.page}
@@ -150,7 +138,6 @@ const ReviewsList = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

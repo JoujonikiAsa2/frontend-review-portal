@@ -24,7 +24,29 @@ import { signOut, useSession } from "next-auth/react";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import deleteTokenFromCookie from "@/Helpers/deleteTokenFromCookie";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { navigationItems } from "../Home/Constants";
+
+export const navigationItems = [
+  {
+    title: "Home",
+    href: "/",
+    description: "",
+  },
+  {
+    title: "Top Reviews",
+    href: "/reviews",
+    description: "",
+  },
+  {
+    title: "About",
+    href: "/about",
+    description: "",
+  },
+    {
+    title: "FAQ",
+    href: "/faq",
+    description: "",
+  },
+];
 
 const Header = () => {
   const session = useSession();
@@ -32,50 +54,53 @@ const Header = () => {
   const { setTheme } = useTheme();
   const [isOpen, setOpen] = useState(false);
   return (
-    <header className="w-full z-40   bg-background ">
+    <header className="w-full z-40 bg-background ">
       <div className="container relative mx-auto min-h-20 flex gap-4 flex-row lg:grid lg:grid-cols-3 items-center">
-        <div className="flex lg:justify-center items-center">
+        <div className="flex items-center">
           <Link href="/" className="font-semibold mr-4 playwrite-ro text-3xl">
             Opinia
           </Link>
-          <NavigationMenu className="flex justify-start items-start">
-            <NavigationMenuList className="flex justify-start gap-4 flex-row">
-              {navigationItems.map((item) => (
-                <NavigationMenuItem key={item.title}>
-                  {item.href ? (
-                    <>
-                      <NavigationMenuLink href={item.href}>
-                        {item.title}
-                      </NavigationMenuLink>
-                    </>
-                  ) : (
-                    <>
-                      <NavigationMenuTrigger className="font-medium text-sm">
-                        {item.title}
-                      </NavigationMenuTrigger>
-                      <NavigationMenuContent className="!w-[450px] p-4">
-                        <div className="flex flex-col lg:grid grid-cols-2 gap-4">
-                          <div className="flex flex-col h-full justify-between">
-                            <div className="flex flex-col">
-                              <p className="text-base">{item.title}</p>
-                              <p className="text-muted-foreground text-sm">
-                                {item.description}
-                              </p>
-                            </div>
-                            <Button size="sm" className="mt-10">
-                              Book a call today
-                            </Button>
-                          </div>
-                        </div>
-                      </NavigationMenuContent>
-                    </>
-                  )}
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
         </div>
-        <div className="justify-start items-center gap-4 lg:flex hidden flex-row"></div>
+        <div className="justify-center items-center gap-4 lg:flex hidden flex-row">
+          <nav className="hidden md:flex items-center space-x-8">
+            <NavigationMenu className="flex justify-start items-start">
+              <NavigationMenuList className="flex justify-start gap-4 flex-row">
+                {navigationItems.map((item) => (
+                  <NavigationMenuItem key={item.title}>
+                    {item.href ? (
+                      <>
+                        <NavigationMenuLink href={item.href}>
+                          {item.title}
+                        </NavigationMenuLink>
+                      </>
+                    ) : (
+                      <>
+                        <NavigationMenuTrigger className="font-medium text-sm">
+                          {item.title}
+                        </NavigationMenuTrigger>
+                        <NavigationMenuContent className="!w-[450px] p-4">
+                          <div className="flex flex-col lg:grid grid-cols-2 gap-4">
+                            <div className="flex flex-col h-full justify-between">
+                              <div className="flex flex-col">
+                                <p className="text-base">{item.title}</p>
+                                <p className="text-muted-foreground text-sm">
+                                  {item.description}
+                                </p>
+                              </div>
+                              <Button size="sm" className="mt-10">
+                                Book a call today
+                              </Button>
+                            </div>
+                          </div>
+                        </NavigationMenuContent>
+                      </>
+                    )}
+                  </NavigationMenuItem>
+                ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </nav>
+        </div>
 
         <div className="flex justify-end w-full gap-4">
           <DropdownMenu>
@@ -145,7 +170,7 @@ const Header = () => {
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </Button>
           {isOpen && (
-            <div className="absolute top-20 border-t flex flex-col w-full right-0 bg-background shadow-lg py-4 container gap-8">
+            <div className="z-50 p-4 absolute top-20 border-t flex flex-col w-full right-0 bg-background shadow-gray-600 shadow py-4 container gap-8">
               {navigationItems.map((item) => (
                 <div key={item.title}>
                   <div className="flex flex-col gap-2">

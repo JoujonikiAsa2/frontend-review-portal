@@ -8,8 +8,6 @@ export async function middleware(request: NextRequest) {
   const isPublicRoute =
     currentRoute === "/login" || currentRoute === "/register";
 
-  console.log("from middleware", session);
-
   // Block unauthenticated users from private routes
   if (!session && !isPublicRoute) {
     return NextResponse.redirect(new URL("/login", request.url));

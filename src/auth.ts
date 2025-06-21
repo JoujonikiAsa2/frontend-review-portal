@@ -104,7 +104,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.googleAccessToken = user.googleAccessToken;
         token.token = user.token;
       }
-      console.log({ token });
       return token;
     },
     async session({ session, token }) {
@@ -114,7 +113,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.name = token.name;
         session.user.token = token.token as string;
       }
-      console.log({ session });
       return session;
     },
   },

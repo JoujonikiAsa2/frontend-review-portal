@@ -6,12 +6,7 @@ import CustomLoader from "@/components/common/custom-loader";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { format } from "date-fns";
-import {
-  Check,
-  X,
-  Download,
-  Search,
-} from "lucide-react";
+import { Check, X, Download, Search, XCircle } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -40,8 +35,15 @@ const formatDate = (dateString: string) => {
 };
 
 // Helper function for payment status badge
-const PaymentStatusBadge = ({ status }: { status: "CONFIRMED" | "PENDING" | "FAILED" | "REFUNDED" }) => {
-  const statusStyles: Record<"CONFIRMED" | "PENDING" | "FAILED" | "REFUNDED", string> = {
+const PaymentStatusBadge = ({
+  status,
+}: {
+  status: "CONFIRMED" | "PENDING" | "FAILED" | "REFUNDED";
+}) => {
+  const statusStyles: Record<
+    "CONFIRMED" | "PENDING" | "FAILED" | "REFUNDED",
+    string
+  > = {
     CONFIRMED: "bg-black text-white",
     PENDING: "bg-gray-200 text-gray-800",
     FAILED: "bg-red-100 text-red-800",
@@ -49,7 +51,11 @@ const PaymentStatusBadge = ({ status }: { status: "CONFIRMED" | "PENDING" | "FAI
   };
 
   return (
-    <Badge className={`${statusStyles[status as keyof typeof statusStyles] || "bg-gray-100"} font-medium`}>
+    <Badge
+      className={`${
+        statusStyles[status as keyof typeof statusStyles] || "bg-gray-100"
+      } font-medium`}
+    >
       {status === "CONFIRMED" && <Check className="w-3 h-3 mr-1" />}
       {status === "FAILED" && <X className="w-3 h-3 mr-1" />}
       {status}
@@ -74,34 +80,38 @@ interface Payment {
 
 const PaymentReceipt = ({ payment }: { payment: Payment }) => {
   return (
-    <div className="border border-gray-200 rounded-lg p-4 mb-4">
+    <div className="bg-card border border-gray-200 rounded-lg p-4 mb-4 text-left ">
       <div className="flex justify-between items-start mb-4">
         <div>
-          <span className="text-sm text-gray-500">Receipt ID</span>
-          <h3 className="font-medium text-black">
-            {payment.id.substring(0, 8)}...
-          </h3>
+          <span className="text-sm text-gray-600 dark:text-gray-400">
+            Receipt ID
+          </span>
+          <h3 className="font-medium">{payment.id}</h3>
         </div>
         <PaymentStatusBadge status={payment.paymentStatus} />
       </div>
 
       <div className="space-y-3 mb-4">
         <div>
-          <span className="text-xs text-gray-500">Amount</span>
-          <p className="font-bold text-black">
+          <span className="text-xs text-gray-600 dark:text-gray-400">
+            Amount
+          </span>
+          <p className="font-bold">
             {payment.amount} {payment.currency?.toUpperCase() || "BDT"}
           </p>
         </div>
 
         <div>
-          <span className="text-xs text-gray-500">Date</span>
+          <span className="text-xs text-gray-600 dark:text-gray-400">Date</span>
           <p className="text-sm">
             {formatDate(payment.completedAt || payment.createdAt || "")}
           </p>
         </div>
 
         <div>
-          <span className="text-xs text-gray-500">Payment Method</span>
+          <span className="text-xs text-gray-600 dark:text-gray-400">
+            Payment Method
+          </span>
           <p className="text-sm">{payment.paymentMethod || "N/A"}</p>
         </div>
       </div>
@@ -111,24 +121,28 @@ const PaymentReceipt = ({ payment }: { payment: Payment }) => {
         collapsible
         className="border-t border-gray-100 pt-2"
       >
-        <AccordionItem value="details" className="border-b-0">
+        <AccordionItem value="details" className=" border-b-0">
           <AccordionTrigger className="py-2 text-sm hover:no-underline">
             View Details
           </AccordionTrigger>
           <AccordionContent>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-500">Transaction ID</span>
-                <span className="font-mono">
+                <span className="text-gray-600 dark:text-gray-400">
+                  Transaction ID
+                </span>
+                <span className="font-mono text-xs">
                   {payment.transactionId || "N/A"}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Email</span>
+                <span className="text-gray-600 dark:text-gray-400">Email</span>
                 <span>{payment.email}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Payment Type</span>
+                <span className="text-gray-600 dark:text-gray-400">
+                  Payment Type
+                </span>
                 <span>{payment.paymentType}</span>
               </div>
             </div>
@@ -137,14 +151,6 @@ const PaymentReceipt = ({ payment }: { payment: Payment }) => {
       </Accordion>
 
       <div className="mt-4 flex justify-between">
-        <Button
-          variant="outline"
-          size="sm"
-          className="text-black border-gray-200 hover:bg-gray-50"
-        >
-          <Download className="h-4 w-4 mr-1" />
-          Download
-        </Button>
         <Link href={`/reviews/${payment.reviewId}`}>
           <Button size="sm" className="bg-black text-white hover:bg-gray-800">
             View Review
@@ -156,17 +162,18 @@ const PaymentReceipt = ({ payment }: { payment: Payment }) => {
 };
 
 const PaymentHistory = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [isDialougeOpen, setIsDialougeOpen] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   // const [currentPage, ] = useState(1);
   const { data: session } = useSession();
   // Fetch payment history data
- // Fetch payment history data
- const fetchPaymentHistory = useCallback(() => {
-  if (!session?.user?.email) {
-    return Promise.resolve([]); // Handle undefined email safely
-  }
-  return getUsersAllPayments(session.user.email);
-}, [session?.user?.email]);
+  // Fetch payment history data
+  const fetchPaymentHistory = useCallback(() => {
+    if (!session?.user?.email) {
+      return Promise.resolve([]); // Handle undefined email safely
+    }
+    return getUsersAllPayments(session.user.email);
+  }, [session?.user?.email]);
 
   const { data, loading, error } = useFetch(fetchPaymentHistory);
   // console.log("data", data);
@@ -176,13 +183,13 @@ const PaymentHistory = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="relative mb-12 text-center">
             <div className="absolute left-0 right-0 top-1/2 border-t border-gray-200 -z-10"></div>
-            <h1 className="inline-block px-8 text-4xl font-serif font-bold text-black bg-white relative">
+            <h1 className="px-8 text-4xl font-bold text-black dark:text-white relative">
               Payment History
             </h1>
           </div>
@@ -218,7 +225,7 @@ const PaymentHistory = () => {
               <div className="hidden md:block overflow-hidden rounded-xl border border-gray-200 shadow-sm mb-8">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-gray-50">
+                    <TableRow className="bg-card">
                       <TableHead className="w-1/5">Date</TableHead>
                       <TableHead className="w-1/6">Transaction ID</TableHead>
                       <TableHead className="w-1/6">Amount</TableHead>
@@ -232,7 +239,7 @@ const PaymentHistory = () => {
                   <TableBody>
                     {data?.data?.length > 0 ? (
                       data.data.map((payment: Payment) => (
-                        <TableRow key={payment.id} className="hover:bg-gray-50">
+                        <TableRow key={payment.id} className="">
                           <TableCell className="font-medium">
                             {formatDate(
                               payment.completedAt || payment.createdAt || ""
@@ -258,17 +265,26 @@ const PaymentHistory = () => {
                             />
                           </TableCell>
                           <TableCell className="text-right">
-                            <div className="flex justify-end gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-black border-gray-200 hover:bg-gray-50"
-                              >
-                                <Download className="h-4 w-4" />
-                                <span className="sr-only md:not-sr-only md:ml-2">
-                                  Receipt
-                                </span>
-                              </Button>
+                            <div className="flex  gap-2">
+                                                          <Button
+                              size="sm"
+                              className="bg-black text-white hover:bg-gray-800"
+                              onClick={() => setIsDialougeOpen(true)}
+                            >
+                              View Deatils
+                            </Button>
+                            {isDialougeOpen && (
+                              <div className="fixed inset-0 bg-black/15 backdrop-blur-sm flex justify-center items-center z-50">
+                                <XCircle
+                                  onClick={() => setIsDialougeOpen(false)}
+                                  className="absolute top-4 right-4"
+                                />
+                                <PaymentReceipt
+                                  key={payment.id}
+                                  payment={payment}
+                                />
+                              </div>
+                            )}
                               <Link href={`/reviews/${payment.reviewId}`}>
                                 <Button
                                   size="sm"
@@ -300,7 +316,9 @@ const PaymentHistory = () => {
                   ))
                 ) : (
                   <Card className="p-8 text-center">
-                    <p className="text-gray-500">No payment history found</p>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      No payment history found
+                    </p>
                   </Card>
                 )}
               </div>
@@ -329,7 +347,7 @@ const PaymentHistory = () => {
               <p className="text-3xl font-bold">
                 {data?.meta?.totalSpent || 0} BDT
               </p>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                 From {data?.meta?.totalTransactions || 0} transactions
               </p>
             </Card>
@@ -338,7 +356,9 @@ const PaymentHistory = () => {
               <p className="text-3xl font-bold">
                 {data?.meta?.totalReviews || 0}
               </p>
-              <p className="text-sm text-gray-500 mt-1">Purchased reviews</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                Purchased reviews
+              </p>
             </Card>
             <Card className="p-6 border border-gray-200">
               <h3 className="text-lg font-medium mb-2">Latest Purchase</h3>
@@ -350,7 +370,7 @@ const PaymentHistory = () => {
                     )
                   : "N/A"}
               </p>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                 {data?.meta?.latestReviewTitle || "No recent purchases"}
               </p>
             </Card>

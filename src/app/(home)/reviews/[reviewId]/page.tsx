@@ -28,8 +28,8 @@ export default async function ReviewPage({ params }: { params: { reviewId: strin
   if (!review) return notFound();
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full p-4 bg-gray-200">
-      <ReviewDetails reviewItem={review} />
+    <div className="flex flex-col items-center justify-center w-full h-full p-4 bg-background">
+      <ReviewDetails sReview={review} />
     </div>
   );
 }

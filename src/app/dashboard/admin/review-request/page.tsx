@@ -4,7 +4,7 @@ import React from "react";
 const page = () => {
   return (
     <div>
-      <h1 className="mt-5 text-3xl font-bold text-center mb-5">Review Requests</h1>
+      <h1 className="mt-5 text-3xl font-bold text-center mb-5 overflow-hidden">Review Requests</h1>
       <ApprovalTableRow />
     </div>
   );

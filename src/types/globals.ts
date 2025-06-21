@@ -1,3 +1,15 @@
+export type TArrayResponseData<T> = {
+  data: T[],
+  success: boolean,
+  message:string
+}
+
+export type TSingleResponseData<T> = {
+  data: T,
+  success: boolean,
+  message:string
+}
+
 export interface IAuth {
   name?: string;
   email: string;
@@ -83,10 +95,35 @@ export type TReviewCard = {
   createdAt: string;
   updatedAt: string;
   price: number;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    imageUrl: string | null;
-  };
+  user: TUser;
+  comments: Comment[];
+};
+
+// TypeScript Types for Admin Analytics API Response
+
+export type TAdminAnalyticsResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    totalEarnings: number;
+    premiumReviewCount: number;
+    reviewsByCategory: TReviewByCategory[];
+    allReviews: TReviewCard[]
+    reviewStatus: TReviewStatus[];
+    reviewPublishStatus: TReviewStatus[];
+  };
+};
+
+export type TReviewByCategory = {
+  _count: {
+    _all: number;
+  };
+  category: string;
+};
+
+export type TReviewStatus = {
+  _count: {
+    _all: number;
+  };
+  isPremium: boolean;
 };

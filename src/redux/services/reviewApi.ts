@@ -1,22 +1,6 @@
 // src/redux/services/reviewApi.ts
+import { TArrayResponseData, TReviewCard, TSingleResponseData } from "@/types/globals";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-interface Review {
-  id: string;
-  title: string;
-  content: string;
-  upVotes: number;
-  downVotes: number;
-  user: {
-    name: string;
-  };
-  imageUrl: string;
-  category: string;
-  RatingSummary: number;
-  isPremium: boolean;
-  price: number;
-  createdAt: string;
-}
 
 export const reviewApi = createApi({
   reducerPath: "reviewApi",
@@ -33,7 +17,7 @@ export const reviewApi = createApi({
   tagTypes: ["Review"],
   endpoints: (builder) => ({
     updateVote: builder.mutation<
-      Review,
+      TReviewCard,
       {
         reviewId: string;
         voteType: "upVotes" | "downVotes";
@@ -44,11 +28,19 @@ export const reviewApi = createApi({
       }),
       invalidatesTags: ["Review"],
     }),
-    getReview: builder.query<Review, string>({
+    getReview: builder.query<TSingleResponseData<TReviewCard>, string>({
       query: (id) => `${id}`,
       providesTags: ["Review"],
     }),
+    getAllReviews: builder.query<TArrayResponseData<TReviewCard>, string>({
+      query: (category:string) => `?category=${category}`,
+      providesTags: ["Review"],
+    }),  
+     getMyAllReviews: builder.query<TArrayResponseData<TReviewCard>, string>({
+      query: () => `my-reviews`,
+      providesTags: ["Review"],
+    })
   }),
 });
 
-export const { useUpdateVoteMutation, useGetReviewQuery } = reviewApi;
+export const { useUpdateVoteMutation, useGetReviewQuery,useGetAllReviewsQuery, useGetMyAllReviewsQuery } = reviewApi;

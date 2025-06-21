@@ -55,7 +55,7 @@ export function FilterSidebar() {
 
   return (
     <div className="bg-card p-6 border border-gray-100 dark:border-gray-700 rounded-lg shadow-sm transition-shadow hover:shadow-md text-black dark:text-white">
-      <h2 className="font-serif text-xl  mb-6 pb-3 border-b border-gray-200 tracking-tight">
+      <h2 className=" text-xl  mb-6 pb-3 border-b border-gray-200 tracking-tight">
         Refine Results
       </h2>
 

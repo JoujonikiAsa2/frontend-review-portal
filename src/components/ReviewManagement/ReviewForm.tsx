@@ -105,7 +105,6 @@ export default function ReviewForm() {
           RatingSummary: res.data.RatingSummary?.toString() || "",
           markAsPremium: res.data.isPremium || false,
         });
-
         setLoading(false);
       } catch (error) {
         console.error("Error fetching review details:", error);
@@ -405,7 +404,7 @@ export default function ReviewForm() {
                             placeholder={
                               formType === "update" && currentData.description
                                 ? currentData.description
-                                : "Write your review..."
+                                : "Write your review (more than 10 characters)..."
                             }
                             className="min-h-32"
                             {...field}

@@ -35,8 +35,12 @@ export const reviewApi = createApi({
     getAllReviews: builder.query<TArrayResponseData<TReviewCard>, string>({
       query: (category:string) => `?category=${category}`,
       providesTags: ["Review"],
+    }),  
+     getMyAllReviews: builder.query<TArrayResponseData<TReviewCard>, string>({
+      query: () => `my-reviews`,
+      providesTags: ["Review"],
     })
   }),
 });
 
-export const { useUpdateVoteMutation, useGetReviewQuery,useGetAllReviewsQuery } = reviewApi;
+export const { useUpdateVoteMutation, useGetReviewQuery,useGetAllReviewsQuery, useGetMyAllReviewsQuery } = reviewApi;

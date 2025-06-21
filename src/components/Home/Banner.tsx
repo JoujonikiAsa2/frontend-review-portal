@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "../ui/button";
 import { Play, Search, Star } from "lucide-react";
 import { Badge } from "../ui/badge";
+import Link from "next/link";
 
 const Banner = () => {
   return (
@@ -12,7 +13,7 @@ const Banner = () => {
 
       <div className="space-y-8">
         <Badge className="bg-green-600/20 text-green-600 border-green-600/30 hover:bg-green-600/30">
-          🚀 Trusted by 50K+ Users
+          🚀 Trusted by 50K+ Users000
         </Badge>
 
         <h1 className="text-4xl lg:text-6xl font-bold leading-tight">
@@ -25,14 +26,16 @@ const Banner = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4">
+          <Link href="/reviews">
           <Button size="lg" className="bg-green-600 hover:bg-green-700 text-white font-semibold">
             <Search className="w-5 h-5 mr-2" />
             Explore Reviews
           </Button>
-          <Button size="lg" variant="outline" className="border-green-600 text-green-600 hover:bg-green-100 dark:hover:bg-gray-800">
+          </Link>
+          {/* <Button size="lg" variant="outline" className="border-green-600 text-green-600 hover:bg-green-100 dark:hover:bg-gray-800">
             <Play className="w-5 h-5 mr-2" />
-            Watch Demo
-          </Button>
+            Watch Demo000
+          </Button> */}
         </div>
       </div>
 

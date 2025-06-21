@@ -220,12 +220,12 @@ refetch()
                 <FaShare />
               </div>
               <FacebookShareButton
-                url={`http://localhost:3000/reviews/${review?.id}`}
+                url={`https://frontend-review-portal-lilac.vercel.app/reviews/${review?.id}`}
               >
                 <FacebookIcon className="w-6 h-6 mr-1 rounded-full" />
               </FacebookShareButton>
               <LinkedinShareButton
-                url={`http://localhost:3000/reviews/${review?.id}`}
+                url={`https://frontend-review-portal-lilac.vercel.app/reviews/${review?.id}`}
               >
                 <LinkedinIcon className="w-6 h-6 mr-1 rounded-full" />
               </LinkedinShareButton>

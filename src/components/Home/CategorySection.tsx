@@ -7,7 +7,7 @@ const CategorySection = () => {
                  <section className="py-20 bg-[#F9FAFB] dark:bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center space-y-4 mb-16">
-            <h2 className="text-4xl font-bold dark:text-white text-gray-90">Browse by Category</h2>
+            <h2 className="text-4xl font-bold dark:text-white text-gray-90">Browse Categories</h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">Explore reviews across all major product categories</p>
           </div>
 

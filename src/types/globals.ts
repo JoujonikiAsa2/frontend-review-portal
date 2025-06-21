@@ -1,3 +1,15 @@
+export type TArrayResponseData<T> = {
+  data: T[],
+  success: boolean,
+  message:string
+}
+
+export type TSingleResponseData<T> = {
+  data: T,
+  success: boolean,
+  message:string
+}
+
 export interface IAuth {
   name?: string;
   email: string;
@@ -83,10 +95,6 @@ export type TReviewCard = {
   createdAt: string;
   updatedAt: string;
   price: number;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    imageUrl: string | null;
-  };
+  user: TUser;
+  comments: Comment[];
 };

@@ -14,7 +14,6 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
-  console.log(reviewId)
   const session = useSession();
   const router = useRouter()
   const user = session?.data?.user;
@@ -100,7 +99,7 @@ const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
       setReview(result.data);
     };
     fetchReviewDetails();
-  }, []);
+  }, [reviewId]);
 
   useEffect(() => {
     const fetchStripeSession = async () => {
@@ -111,15 +110,14 @@ const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
       });
       setClientSecret(result?.data?.clientSecret);
     };
-    if (user && review?.price) fetchStripeSession();
-  }, [reviewId, review?.price, user]);
+    if (user) fetchStripeSession();
+  }, [ user, review?.price]);
   
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const toastId = toast.loading("Payment processing... stay tune 😊");
     if (!stripe || !elements || !clientSecret) {
-      console.log({ stripe, elements, clientSecret });
       toast.error("Payment system aren't available. Try again");
       return;
     }
@@ -185,9 +183,12 @@ const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
 
         const res = await confirmPayment(paymentDetails as TPaymentPayload);
 
-        if (res?.success) {
+        if (res?.success === true) {
           toast.success(res?.message, { id: toastId });
           router.push(`/success/${res?.data?.id}`)
+        }
+        else if (res?.success === false) {
+          toast.error("Already baught or something error", { id: toastId });
         }
       } else {
         toast.warning(`Payment status: ${paymentIntent.status}`);
@@ -263,7 +264,7 @@ const CheckoutPage = ({ reviewId }: { reviewId: string }) => {
 
           <button
             type="submit"
-            className="w-full py-3 px-4 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50 focus:ring-teal-900 bg-foreground"
+            className="w-full py-3 px-4 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-opacity-50 focus:ring-teal-900 bg-foreground hover:cursor-pointer"
             disabled={!stripe || !clientSecret}
           >
             {loading ? (

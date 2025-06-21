@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { reviewApi } from "./services/reviewApi";
 import { commentApi } from "./services/commentApi";
+import { analyticApi } from "./services/analyticApi";
 import authReducer from "./features/authSlice";
 
 import {
@@ -26,6 +27,7 @@ const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
+    [analyticApi.reducerPath]: analyticApi.reducer,
     [reviewApi.reducerPath]: reviewApi.reducer,
     [commentApi.reducerPath]: commentApi.reducer,
     [paymentApi.reducerPath]: paymentApi.reducer,
@@ -38,6 +40,7 @@ export const store = configureStore({
     })
       .concat(reviewApi.middleware)
       .concat(commentApi.middleware)
+            .concat(analyticApi.middleware)
       .concat(paymentApi.middleware),
 });
 

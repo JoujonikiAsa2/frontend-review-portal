@@ -1,8 +1,9 @@
 'use client";'
+import Charts from "@/components/Admin/Charts";
 import React from "react";
 
 const AdminDashboard = () => {
-  return <div>admin dahsboard</div>;
+  return <div><Charts/></div>;
 };
 
 export default AdminDashboard;

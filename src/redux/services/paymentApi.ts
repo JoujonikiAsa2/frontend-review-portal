@@ -19,7 +19,11 @@ export const paymentApi = createApi({
       query: (email:string) => `my-payments/${email}`,
       providesTags: ["Payment"],
     }),
+    getAllPayments: builder.query({
+      query: () => ``,
+      providesTags: ["Payment"],
+    }),
   }),
 });
 
-export const { useGetMyPaymentsQuery } = paymentApi;
+export const { useGetMyPaymentsQuery, useGetAllPaymentsQuery } = paymentApi;

@@ -37,11 +37,6 @@ const adminBar = [
     url: "/dashboard/admin/create-review",
     icon: IconListDetails as Icon,
   },
-  {
-    title: "My Reviews",
-    url: "/dashboard/user/my-reviews",
-    icon: IconListDetails,
-  },
 
   {
     title: "Review Requests",

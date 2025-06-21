@@ -120,7 +120,7 @@ export default function ReviewApprovalTable() {
     setActionLoading(true);
     const loadingId = toast.loading("Rejecting review...");
     try {
-      await updateReviewStatus(reviewToReject.id, "REJECTED");
+      await updateReviewStatus(reviewToReject.id, "REJECTED", rejectionReason);
 
       // Update local state
       setReviews((prev) => {
@@ -170,7 +170,7 @@ export default function ReviewApprovalTable() {
       {/* Main Table */}
       <div className="rounded-md border border-gray-200 dark:border-gray-800">
         <div className="overflow-x-auto min-h-[500px] relative">
-          <table className="w-full divide-y divide-gray-200 dark:divide-gray-800">
+          <table className="w-full divide-y divide-gray-200 dark:divide-gray-800  overflow-hidden">
             <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
                 <th
@@ -235,6 +235,8 @@ export default function ReviewApprovalTable() {
                             <Image
                               src={review.imageUrl}
                               alt={review.title}
+                              width={50}
+                              height={50}
                               className="h-full w-full object-cover"
                             />
                           </div>
@@ -334,32 +336,6 @@ export default function ReviewApprovalTable() {
                                       Reject
                                     </button>
                                   </>
-                                )}
-
-                                {/* For already published reviews - option to reject */}
-                                {review.isPublished && (
-                                  <button
-                                    className="flex items-center px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 w-full text-left"
-                                    onClick={() => openRejectDialog(review)}
-                                    disabled={actionLoading}
-                                  >
-                                    <X className="mr-2 h-4 w-4" />
-                                    Unpublish & Reject
-                                  </button>
-                                )}
-
-                                {/* For rejected reviews - option to approve */}
-                                {!review.isPublished && (
-                                  <button
-                                    className="flex items-center px-4 py-2 text-sm text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 w-full text-left"
-                                    onClick={() =>
-                                      handleApproveReview(review.id)
-                                    }
-                                    disabled={actionLoading}
-                                  >
-                                    <Check className="mr-2 h-4 w-4" />
-                                    Approve & Publish
-                                  </button>
                                 )}
                               </div>
                             </div>

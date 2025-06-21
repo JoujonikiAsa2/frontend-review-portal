@@ -98,3 +98,32 @@ export type TReviewCard = {
   user: TUser;
   comments: Comment[];
 };
+
+// TypeScript Types for Admin Analytics API Response
+
+export type TAdminAnalyticsResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    totalEarnings: number;
+    premiumReviewCount: number;
+    reviewsByCategory: TReviewByCategory[];
+    allReviews: TReviewCard[]
+    reviewStatus: TReviewStatus[];
+    reviewPublishStatus: TReviewStatus[];
+  };
+};
+
+export type TReviewByCategory = {
+  _count: {
+    _all: number;
+  };
+  category: string;
+};
+
+export type TReviewStatus = {
+  _count: {
+    _all: number;
+  };
+  isPremium: boolean;
+};
